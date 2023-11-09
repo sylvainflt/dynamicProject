@@ -24,6 +24,22 @@ public class Article {
 		this.quantite = quantite;
 		this.idCategorie = idCategorie;
 	}
+
+	public String getDesignation() {
+		return designation;
+	}
+
+	public float getPrixUnitaire() {
+		return prixUnitaire;
+	}
+
+	public int getQuantite() {
+		return quantite;
+	}
+
+	public int getIdCategorie() {
+		return idCategorie;
+	}
 	
 	
 	

@@ -132,7 +132,7 @@ public class Connexion {
 		try {
 			
 			ps = cnt.prepareStatement("INSERT INTO article (designation, pu, qty, idCategorie) \n"
-					+ "VALUES('"+a.getDesignation()+"')");
+					+ "VALUES('"+a.getDesignation()+"','"+a.getPrixUnitaire()+"','"+a.getQuantite()+"','"+a.getIdCategorie()+"')");
 			ps.execute();							
 						
 		} catch (SQLException e) {
