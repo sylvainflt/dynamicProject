@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>  
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
 <!DOCTYPE html>
 <html>
 <head>
@@ -101,10 +101,10 @@
 			      <input type="text" class="form-control" id="quantite" name="quantite" required>		      
 			    </div>
 			    <div class="form-group">
-			      <label for="categorie" class="form-label mt-2">Catégorie</label>
-			      <select class="form-control" id="categorie" name="categorie">		
+			      <label for="categorieSelect" class="form-label mt-2">Catégorie</label>
+			      <select class="form-control" id="categorieSelect" name="categorie">		
 			      	<c:forEach items="${categories}" var="categorie">
-				        <option value="${categorie.id}">${categorie.designation}</option>
+				        <option class="text-info" value="${categorie.id}">${categorie.designation}</option>
 				    </c:forEach>
 				  </select>  
 			    </div>

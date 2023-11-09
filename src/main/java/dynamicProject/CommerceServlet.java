@@ -51,8 +51,50 @@ public class CommerceServlet extends HttpServlet {
 			
 			this.doAjoutCategorie(request, response);
 			
+		} else if (request.getParameter("flag").equals("ajoutArticle")){
+			
+			this.doAjoutArticle(request, response);
+			
 		} else {
 			this.doGet(request, response);
+		}
+	}
+
+	private void doAjoutArticle(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		String resultat;
+		Map<String,String> erreurs = new HashMap<String,String>();
+				
+		String designation = request.getParameter("designation");
+		float prixUnitaire = Float.parseFloat(request.getParameter("prixUnitaire"));
+		int quantite = Integer.parseInt(request.getParameter("quantite"));
+		int categorie = Integer.parseInt(request.getParameter("categorie"));
+		
+		try {
+			validationDesignationArticle(designation);
+		} catch (Exception e) {
+			erreurs.put(designation, e.getMessage());
+		}
+		
+		if(erreurs.isEmpty()) {
+			resultat = "Article ajoutée.";			
+			Article a = new Article(designation, prixUnitaire, quantite, categorie);
+			co.ajouterArticle(a);
+			
+		}else {
+			resultat = "Échec de l'ajout";
+		}
+		
+		request.setAttribute("erreurs", erreurs);
+		request.setAttribute("resultat", resultat);
+		
+		request.getRequestDispatcher("/connexionAdmin.jsp").forward(request, response);
+		
+	}
+
+	private void validationDesignationArticle(String designation) throws Exception {
+		if(designation != null && designation.trim().length() < 3) {
+			throw new Exception("Le champ doit être d'au moins 3 caractères");
 		}
 	}
 

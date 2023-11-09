@@ -124,6 +124,23 @@ public class Connexion {
 		
 	}
 	
+	public void ajouterArticle(Article a) {
+		
+		Connection cnt = this.myCnx();		
+		PreparedStatement ps;
+		
+		try {
+			
+			ps = cnt.prepareStatement("INSERT INTO article (designation, pu, qty, idCategorie) \n"
+					+ "VALUES('"+a.getDesignation()+"')");
+			ps.execute();							
+						
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+		
+	}
+	
 	public List<Categorie> getCategories(){
 		
 		Connection cnt = this.myCnx();
