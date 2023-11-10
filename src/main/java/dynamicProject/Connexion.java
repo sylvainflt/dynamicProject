@@ -141,6 +141,25 @@ public class Connexion {
 		
 	}
 	
+	public void modifierArticle(Article a) {
+		
+		Connection cnt = this.myCnx();		
+		PreparedStatement ps;
+		
+		try {
+			
+			ps = cnt.prepareStatement("UPDATE article SET designation = '"+a.getDesignation()
+									+"', pu = '"+a.getPrixUnitaire()+"', qty = '"+a.getQuantite()
+									+"', idCategorie = '"+a.getIdCategorie()					
+									+"' WHERE idArticle = "+a.getId());
+			ps.execute();							
+						
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+		
+	}
+	
 	public List<Categorie> getCategories(){
 		
 		Connection cnt = this.myCnx();
@@ -251,7 +270,6 @@ public class Connexion {
 	}
 
 	
-
 	
 	
 }

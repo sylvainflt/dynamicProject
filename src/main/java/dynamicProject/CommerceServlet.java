@@ -79,9 +79,49 @@ public class CommerceServlet extends HttpServlet {
 			
 			this.doSupprimerArticles(request, response);
 			
+		} else if (request.getParameter("flag").equals("articleModifieEnvoi")){
+			
+			this.doArticleModifieEnvoi(request, response);
+			
 		} else {
 			this.doGet(request, response);
 		}
+	}
+
+	private void doArticleModifieEnvoi(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		String resultat;
+		Map<String,String> erreurs = new HashMap<String,String>();
+				
+		int id = Integer.parseInt(request.getParameter("id"));
+		String designation = request.getParameter("designation");
+		float prixUnitaire = Float.parseFloat(request.getParameter("prixUnitaire"));
+		int quantite = Integer.parseInt(request.getParameter("quantite"));
+		int categorie = Integer.parseInt(request.getParameter("categorie"));
+		
+		try {
+			validationDesignationArticle(designation);
+		} catch (Exception e) {
+			erreurs.put(designation, e.getMessage());
+		}
+		
+		if(erreurs.isEmpty()) {
+			resultat = "Article modifié.";			
+			Article a = new Article(id, designation, prixUnitaire, quantite, categorie, "");
+			co.modifierArticle(a);
+			
+		}else {
+			resultat = "Échec de la modification.";
+		}
+		
+		request.setAttribute("erreurs", erreurs);
+		request.setAttribute("resultat", resultat);
+		
+		List<Article> listeArticles = co.getListeArticles();
+	    request.getSession().setAttribute("listeArticles", listeArticles);
+		
+		request.getRequestDispatcher("/connexionAdmin.jsp").forward(request, response);
+		
 	}
 
 	private void doSupprimerArticles(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

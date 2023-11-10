@@ -48,20 +48,24 @@
 	<div class="col-5 mt-4 mx-auto">
 		<form action="CommerceServlet?flag=articleModifieEnvoi" method="POST">
 			<div class="form-group">
+		      	<label>id</label>
+		        <input type="text" name="id" value="${article.id}">
+		    </div>
+			<div class="form-group">
 		      	<label>Désignation</label>
-		        <input type="text" value="${article.designation}">
+		        <input type="text" name="designation" value="${article.designation}">
 		    </div>
 		       <div class="form-group">
 		        <label>Prix unitaire</label>
-				<input type="text" value="${article.prixUnitaire}">
+				<input type="text" name="prixUnitaire" value="${article.prixUnitaire}">
 			</div>
 			<div class="form-group">
 				<label>Quantité</label>
-				<input type="text" value="${article.quantite}">
+				<input type="text" name="quantite" value="${article.quantite}">
 			</div>				
 			<div class="form-group">
 				<label>Catégorie</label>
-				<input type="text" value="${article.categorie}">			      
+				<input type="text" name="categorie" value="${article.idCategorie}">			      
 			</div>	
 			
 			<br/>			    			   
