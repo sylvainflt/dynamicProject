@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,25 +48,29 @@
 		
 	<div class="col-5 mt-4 mx-auto">
 		<form action="CommerceServlet?flag=articleModifieEnvoi" method="POST">
-			<div class="form-group">
+			<div class="form-group d-none">
 		      	<label>id</label>
-		        <input type="text" name="id" value="${article.id}">
+		        <input type="text" class="form-control" name="id" value="${article.id}">
 		    </div>
 			<div class="form-group">
 		      	<label>Désignation</label>
-		        <input type="text" name="designation" value="${article.designation}">
+		        <input type="text" class="form-control" name="designation" value="${article.designation}">
 		    </div>
 		       <div class="form-group">
 		        <label>Prix unitaire</label>
-				<input type="text" name="prixUnitaire" value="${article.prixUnitaire}">
+				<input type="text" class="form-control" name="prixUnitaire" value="${article.prixUnitaire}">
 			</div>
 			<div class="form-group">
 				<label>Quantité</label>
-				<input type="text" name="quantite" value="${article.quantite}">
+				<input type="text" class="form-control" name="quantite" value="${article.quantite}">
 			</div>				
 			<div class="form-group">
 				<label>Catégorie</label>
-				<input type="text" name="categorie" value="${article.idCategorie}">			      
+				<select class="form-control" id="categorieSelect" name="categorie">		
+			      	<c:forEach items="${categories}" var="categorie">
+				        <option class="text-info" value="${categorie.id}">${categorie.designation}</option>
+				    </c:forEach>
+				  </select>		      
 			</div>	
 			
 			<br/>			    			   

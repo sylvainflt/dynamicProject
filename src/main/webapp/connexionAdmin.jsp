@@ -139,15 +139,14 @@
 			    <br/>			    			   
 			
 			    <button type="submit" value="Valider" class="btn btn-primary mt-1">Valider</button>
-			    <button type="reset" value="Annuler" class="btn btn-secondary mt-1">Annuler</button>
-			    			    
-			    <p class="mt-4">${ resultat }</p>
+			    <button type="reset" value="Annuler" class="btn btn-secondary mt-1">Annuler</button>			    			    			    
 				
 			  </fieldset>
 			</form>
 			
 		  </div>	  
 		</div>
+		<p class="mt-4">${ resultat }</p>
 	</div>	
 	
 	<div class="modal" id="modalUpdateArticle">
@@ -182,7 +181,7 @@
 	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeModal()">Close</button>
 	      </div>
 	    </div>
-	  </div>
+	  </div>	  
 	</div>
 	
 	<script>
