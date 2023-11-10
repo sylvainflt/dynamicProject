@@ -31,7 +31,27 @@ public class CommerceServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+		if(request.getParameter("flag").equals("modifierArticle")) {
+			
+			this.doModifierArticle(request, response);
+			
+		} else {
+			response.getWriter().append("Served at: ").append(request.getContextPath());
+		}
+	}
+
+	private void doModifierArticle(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		int id = Integer.parseInt(request.getParameter("id"));
+		System.out.println(id);
+		
+		Article a = co.getArticle(id);
+		
+		request.setAttribute("article", a);
+		
+		request.getRequestDispatcher("/UpdateArticle.jsp").forward(request, response);
+		
 	}
 
 	/**
@@ -149,7 +169,7 @@ public class CommerceServlet extends HttpServlet {
 		request.setAttribute("resultat", resultat);
 		
 		List<Categorie> categories = co.getCategories();
-	    request.setAttribute("categories", categories);
+	    request.getSession().setAttribute("categories", categories);
 	    
 		request.getRequestDispatcher("/connexionAdmin.jsp").forward(request, response);
 		 
@@ -225,7 +245,7 @@ public class CommerceServlet extends HttpServlet {
 					request.getSession().setAttribute("user", login);
 					
 					List<Categorie> categories = co.getCategories();
-				    request.setAttribute("categories", categories);
+				    request.getSession().setAttribute("categories", categories);
 				    
 				    List<Article> listeArticles = co.getListeArticles();
 				    request.getSession().setAttribute("listeArticles", listeArticles);

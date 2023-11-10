@@ -16,3 +16,8 @@ function validationSuppression(event){
 		
 	}
 }
+
+export function updateArticle(event){
+	event.preventDefault()
+	alert("update "+event.target.value)
+}

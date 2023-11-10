@@ -76,11 +76,13 @@
 				  <tbody>	
 				  	<c:forEach items="${listeArticles}" var="article">		    
 					    <tr>
-					      <td>${article.designation}</td>
+					      <td><a href="CommerceServlet?flag=modifierArticle&id=${article.id}" id="article${article.id}" onclick="updateArticle(event)">${article.designation}</a></td>
 					      <td>${article.prixUnitaire}</td>
 					      <td>${article.quantite}</td>
 					      <td>${article.categorie}</td>
-					      <td class="text-center"><input class="form-check-input" type="checkbox" name="articlesIds" value="${article.id}"/></td>
+					      <td class="text-center">
+					      	<input class="form-check-input" type="checkbox" name="articlesIds" value="${article.id}"/>
+					      </td>
 					    </tr>	
 				    </c:forEach>		   			   
 				  </tbody>
@@ -148,7 +150,50 @@
 		</div>
 	</div>	
 	
-		
+	<div class="modal" id="modalUpdateArticle">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title">Modifier Article</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeModal()">
+	          <span aria-hidden="true"></span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	<div class="form-group">
+		      	<label>Désignation</label>
+		        <input type="text" value="${article.designation}">
+		    </div>
+	        <div class="form-group">
+		        <label>Prix unitaire</label>
+				<input type="text" value="${article.prixUnitaire}">
+			</div>
+			<div class="form-group">
+				<label>Quantité</label>
+				<input type="text" value="${article.quantite}">
+			</div>				
+			<div class="form-group">
+				<label>Catégorie</label>
+				<input type="text" value="${article.categorie}">			      
+			</div>	    
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary">Save changes</button>
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeModal()">Close</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<script>
+		function updateArticle(event){
+			//event.preventDefault()
+			modalUpdateArticle.style.display = "block"
+		}
+		function closeModal(){
+			modalUpdateArticle.style.display = "none"
+		}
+	</script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>	
 </body>
 </html>

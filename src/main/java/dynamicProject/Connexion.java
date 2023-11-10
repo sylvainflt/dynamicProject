@@ -188,6 +188,32 @@ public class Connexion {
 		return listeArticles;	
 	}
 	
+	public Article getArticle(int id) {
+		
+		Connection cnt = this.myCnx();
+		Statement st;
+		Article a = null;
+		
+		try {
+			
+			st = cnt.createStatement();
+			ResultSet rs = st.executeQuery("select a.idArticle, a.designation, a.pu, a.qty, a.idCategorie, c.designation "
+					+ "from article a, categorie c "
+					+ "where a.idCategorie = c.idCategorie and a.idArticle = "+id);
+			
+			if(rs.next()) {
+				a = new Article(rs.getInt(1), rs.getString(2), rs.getFloat(3), rs.getInt(4),
+						rs.getInt(5), rs.getString(6));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return a;	
+		
+	}
+	
 	public void supprimerArticle(String id) {
 
 		Connection cnt = this.myCnx();		
@@ -223,6 +249,8 @@ public class Connexion {
 		
 		cn.cloturerConnexion();
 	}
+
+	
 
 	
 	
