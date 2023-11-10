@@ -67,8 +67,11 @@
 			<div class="form-group">
 				<label>Catégorie</label>
 				<select class="form-control" id="categorieSelect" name="categorie">		
-			      	<c:forEach items="${categories}" var="categorie">
-				        <option class="text-info" value="${categorie.id}">${categorie.designation}</option>
+			      	<c:forEach items="${categories}" var="categorie">			      		
+				        <option 
+				        	${categorie.id == article.idCategorie ? 'selected="selected"' : ''}
+				        	class="text-info" value="${categorie.id}">${categorie.designation}
+				        </option>				        				        	
 				    </c:forEach>
 				  </select>		      
 			</div>	
@@ -76,7 +79,7 @@
 			<br/>			    			   
 				
 		    <button type="submit" value="Valider" class="btn btn-primary mt-1">Valider</button>
-		    <button type="reset" value="Annuler" class="btn btn-secondary mt-1">Annuler</button>
+		    <a href="CommerceServlet?flag=retour"><button type="button" value="Annuler" class="btn btn-secondary mt-1">Annuler</button></a>
 		</form>    
 	</div>	
 

@@ -36,6 +36,10 @@ public class CommerceServlet extends HttpServlet {
 			
 			this.doModifierArticle(request, response);
 			
+		} else if(request.getParameter("flag").equals("retour")) {
+			
+			request.getRequestDispatcher("/connexionAdmin.jsp").forward(request, response);
+			
 		} else {
 			response.getWriter().append("Served at: ").append(request.getContextPath());
 		}

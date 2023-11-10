@@ -76,7 +76,7 @@
 				  <tbody>	
 				  	<c:forEach items="${listeArticles}" var="article">		    
 					    <tr>
-					      <td><a href="CommerceServlet?flag=modifierArticle&id=${article.id}" id="article${article.id}" onclick="updateArticle(event)">${article.designation}</a></td>
+					      <td><a href="CommerceServlet?flag=modifierArticle&id=${article.id}" id="article${article.id}">${article.designation}</a></td>
 					      <td>${article.prixUnitaire}</td>
 					      <td>${article.quantite}</td>
 					      <td>${article.categorie}</td>
