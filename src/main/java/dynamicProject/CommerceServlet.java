@@ -55,9 +55,30 @@ public class CommerceServlet extends HttpServlet {
 			
 			this.doAjoutArticle(request, response);
 			
+		} else if (request.getParameter("flag").equals("suppressionArticles")){
+			
+			this.doSupprimerArticles(request, response);
+			
 		} else {
 			this.doGet(request, response);
 		}
+	}
+
+	private void doSupprimerArticles(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		String[] cochesArticles = request.getParameterValues("articlesIds");
+		
+		if(cochesArticles != null && cochesArticles.length > 0) {
+			for ( String coche : cochesArticles ) {
+				co.supprimerArticle(coche);
+			}
+			
+			List<Article> listeArticles = co.getListeArticles();
+		    request.getSession().setAttribute("listeArticles", listeArticles);
+		}
+		
+		request.getRequestDispatcher("/connexionAdmin.jsp").forward(request, response);
+		
 	}
 
 	private void doAjoutArticle(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -87,6 +108,9 @@ public class CommerceServlet extends HttpServlet {
 		
 		request.setAttribute("erreurs", erreurs);
 		request.setAttribute("resultat", resultat);
+		
+		List<Article> listeArticles = co.getListeArticles();
+	    request.getSession().setAttribute("listeArticles", listeArticles);
 		
 		request.getRequestDispatcher("/connexionAdmin.jsp").forward(request, response);
 		
@@ -198,8 +222,13 @@ public class CommerceServlet extends HttpServlet {
 				
 				if(co.getType(login).equals("a")) {
 					
+					request.getSession().setAttribute("user", login);
+					
 					List<Categorie> categories = co.getCategories();
 				    request.setAttribute("categories", categories);
+				    
+				    List<Article> listeArticles = co.getListeArticles();
+				    request.getSession().setAttribute("listeArticles", listeArticles);
 					
 					request.getRequestDispatcher("/connexionAdmin.jsp").forward(request, response);
 				}else {

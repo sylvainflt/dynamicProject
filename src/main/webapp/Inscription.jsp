@@ -7,7 +7,7 @@
 	<title>Inscription</title>
 	<!-- <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/quartz/bootstrap.min.css" rel="stylesheet"> -->
 	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<script type="module" src="js/validations.js"></script>
+	<script type="module" src="js/validationsInscription.js"></script>
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">

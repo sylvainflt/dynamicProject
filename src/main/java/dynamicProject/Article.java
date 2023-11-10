@@ -7,6 +7,7 @@ public class Article {
 	private float prixUnitaire;
 	private int quantite;
 	private int idCategorie;
+	private String categorie;
 	
 	public Article(String designation, float prixUnitaire, int quantite, int idCategorie) {
 		super();
@@ -16,13 +17,14 @@ public class Article {
 		this.idCategorie = idCategorie;
 	}
 
-	public Article(int id, String designation, float prixUnitaire, int quantite, int idCategorie) {
+	public Article(int id, String designation, float prixUnitaire, int quantite, int idCategorie, String categorie) {
 		super();
 		this.id = id;
 		this.designation = designation;
 		this.prixUnitaire = prixUnitaire;
 		this.quantite = quantite;
 		this.idCategorie = idCategorie;
+		this.categorie = categorie;
 	}
 
 	public String getDesignation() {
@@ -39,6 +41,14 @@ public class Article {
 
 	public int getIdCategorie() {
 		return idCategorie;
+	}
+
+	public String getCategorie() {
+		return categorie;
+	}
+
+	public int getId() {
+		return id;
 	}
 	
 	

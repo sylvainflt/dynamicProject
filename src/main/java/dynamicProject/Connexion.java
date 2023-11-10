@@ -17,7 +17,7 @@ public class Connexion {
 		
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-			cn = DriverManager.getConnection("jdbc:mariadb://localhost/commerce", "root", "");
+			cn = DriverManager.getConnection("jdbc:mariadb://localhost/projetCommerce", "root", "");
 			System.out.println("connexion réussie");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -164,6 +164,47 @@ public class Connexion {
 		
 	}
 	
+	public List<Article> getListeArticles() {
+		Connection cnt = this.myCnx();
+		Statement st;
+		List<Article> listeArticles = new ArrayList<Article>();
+		
+		try {
+			
+			st = cnt.createStatement();
+			ResultSet rs = st.executeQuery("select a.idArticle, a.designation, a.pu, a.qty, a.idCategorie, c.designation "
+					+ "from article a, categorie c "
+					+ "where a.idCategorie = c.idCategorie");
+			
+			while(rs.next()) {
+				listeArticles.add(new Article(rs.getInt(1), rs.getString(2), rs.getFloat(3), rs.getInt(4),
+						rs.getInt(5), rs.getString(6)));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return listeArticles;	
+	}
+	
+	public void supprimerArticle(String id) {
+
+		Connection cnt = this.myCnx();		
+		PreparedStatement ps;
+		
+		try {
+			
+			ps = cnt.prepareStatement("DELETE FROM article WHERE idArticle = "+id);
+			ps.execute();							
+						
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+		
+	}
+
+	
 	public static void main(String[] args) throws SQLException {
 		Connexion cn = new Connexion();
 		Connection cnt = cn.myCnx();
@@ -182,5 +223,7 @@ public class Connexion {
 		
 		cn.cloturerConnexion();
 	}
+
+	
 	
 }

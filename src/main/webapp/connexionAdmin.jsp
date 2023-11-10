@@ -8,6 +8,7 @@
 	<title>connexion administrateur</title>
 	<!--  <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/quartz/bootstrap.min.css" rel="stylesheet"> -->
 	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script type="module" src="js/validConnexionAdmin.js"></script>
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
@@ -45,63 +46,67 @@
 	  </div>
 	</nav>
 
-	<% 
-		String user = request.getParameter("user");
-		if(user == null) user = "";
-		
-	%>
-	<h2 class="text-center mt-4">Bienvenue administrateur : <%= user %></h2>
+	<h2 class="text-center mt-4">Bienvenue administrateur : ${user}</h2>
 		
 	<div class="col-5 mt-4 mx-auto">
 		<ul class="nav nav-tabs" role="tablist">
 		  <li class="nav-item" role="presentation">
-		    <a class="nav-link active" data-bs-toggle="tab" href="#categorie" aria-selected="true" role="tab">Categorie</a>
+		    <a class="nav-link active" data-bs-toggle="tab" href="#listeArticles" aria-selected="true" role="tab" tabindex="-1">Articles</a>
 		  </li>
 		  <li class="nav-item" role="presentation">
-		    <a class="nav-link" data-bs-toggle="tab" href="#article" aria-selected="false" role="tab" tabindex="-1">Article</a>
+		    <a class="nav-link" data-bs-toggle="tab" href="#article" aria-selected="false" role="tab">Ajout Article</a>
 		  </li>	  
+		  <li class="nav-item" role="presentation">
+		    <a class="nav-link" data-bs-toggle="tab" href="#categorie" aria-selected="false" role="tab">Categorie</a>
+		  </li>
 		</ul>
 		<div id="myTabContent" class="tab-content">
-		  <div class="tab-pane fade active show" id="categorie" role="tabpanel">
-		    
-		    <form action="CommerceServlet?flag=ajoutCategorie" method="POST">
-			  <fieldset>
-			   
-			    <div class="form-group">
-			      <label for="categorie" class="form-label mt-4">Catégorie</label>
-			      <input type="text" class="form-control" id="categorie" name="categorie" autofocus="autofocus" required>		      
-			    </div>
-			    
-			    <br/>			    			   
-			
-			    <button type="submit" value="Valider" class="btn btn-primary mt-2">Valider</button>
-			    <button type="reset" value="Annuler" class="btn btn-secondary mt-2">Annuler</button>
-			    			    
-			    <p class="mt-4">${ resultat }</p>
-				
-			  </fieldset>
-			</form>
-			
+		  <div class="tab-pane fade active show" id="listeArticles" role="tabpanel">
+		  	<form action="CommerceServlet?flag=suppressionArticles" method="post">
+			  	<table class="table table-hover mt-2">
+				  <thead>
+				    <tr>
+				      <th scope="col">Désignation</th>
+				      <th scope="col">Prix unitaire</th>
+				      <th scope="col">Quantité</th>
+				      <th scope="col">Catégorie</th>
+				      <th scope="col"><button type="submit" class="btn btn-outline-primary p-0" id="suppButton">Supprimer</button></th>
+				    </tr>
+				  </thead>
+				  <tbody>	
+				  	<c:forEach items="${listeArticles}" var="article">		    
+					    <tr>
+					      <td>${article.designation}</td>
+					      <td>${article.prixUnitaire}</td>
+					      <td>${article.quantite}</td>
+					      <td>${article.categorie}</td>
+					      <td class="text-center"><input class="form-check-input" type="checkbox" name="articlesIds" value="${article.id}"/></td>
+					    </tr>	
+				    </c:forEach>		   			   
+				  </tbody>
+				</table>
+			</form>	
 		  </div>
+			
 		  <div class="tab-pane fade" id="article" role="tabpanel">
 		    
 		    <form action="CommerceServlet?flag=ajoutArticle" method="POST">
 			  <fieldset>
 			   
 			    <div class="form-group">
-			      <label for="designation" class="form-label mt-4">Désignation</label>
+			      <label for="designation" class="form-label mt-2">Désignation</label>
 			      <input type="text" class="form-control" id="designation" name="designation" autofocus="autofocus" required>		      
 			    </div>
 			    <div class="form-group">
-			      <label for="prixUnitaire" class="form-label mt-2">Prix unitaire</label>
+			      <label for="prixUnitaire" class="form-label mt-1">Prix unitaire</label>
 			      <input type="text" class="form-control" id="prixUnitaire" name="prixUnitaire" required>		      
 			    </div>
 			    <div class="form-group">
-			      <label for="quantite" class="form-label mt-2">Quantité</label>
+			      <label for="quantite" class="form-label mt-1">Quantité</label>
 			      <input type="text" class="form-control" id="quantite" name="quantite" required>		      
 			    </div>
 			    <div class="form-group">
-			      <label for="categorieSelect" class="form-label mt-2">Catégorie</label>
+			      <label for="categorieSelect" class="form-label mt-1">Catégorie</label>
 			      <select class="form-control" id="categorieSelect" name="categorie">		
 			      	<c:forEach items="${categories}" var="categorie">
 				        <option class="text-info" value="${categorie.id}">${categorie.designation}</option>
@@ -111,12 +116,34 @@
 			    
 			    <br/>			    			   
 			
-			    <button type="submit" value="Valider" class="btn btn-primary mt-2">Valider</button>
-			    <button type="reset" value="Annuler" class="btn btn-secondary mt-2">Annuler</button>
+			    <button type="submit" value="Valider" class="btn btn-primary mt-1">Valider</button>
+			    <button type="reset" value="Annuler" class="btn btn-secondary mt-1">Annuler</button>
 				
 			  </fieldset>
 			</form>
 		    
+		  </div>
+		  
+		  <div class="tab-pane fade" id="categorie" role="tabpanel">
+		    
+		    <form action="CommerceServlet?flag=ajoutCategorie" method="POST">
+			  <fieldset>
+			   
+			    <div class="form-group">
+			      <label for="categorie" class="form-label mt-2">Catégorie</label>
+			      <input type="text" class="form-control" id="categorie" name="categorie" autofocus="autofocus" required>		      
+			    </div>
+			    
+			    <br/>			    			   
+			
+			    <button type="submit" value="Valider" class="btn btn-primary mt-1">Valider</button>
+			    <button type="reset" value="Annuler" class="btn btn-secondary mt-1">Annuler</button>
+			    			    
+			    <p class="mt-4">${ resultat }</p>
+				
+			  </fieldset>
+			</form>
+			
 		  </div>	  
 		</div>
 	</div>	
