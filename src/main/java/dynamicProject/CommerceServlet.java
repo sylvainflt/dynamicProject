@@ -107,6 +107,7 @@ public class CommerceServlet extends HttpServlet {
 			
 			List<Categorie> categories = co.getCategories();
 		    request.getSession().setAttribute("categories", categories);
+		    request.setAttribute("resultat", "Catégorie(s) supprimée(s).");
 		}
 		
 		request.getRequestDispatcher("/connexionAdmin.jsp").forward(request, response);
@@ -160,6 +161,7 @@ public class CommerceServlet extends HttpServlet {
 			
 			List<Article> listeArticles = co.getListeArticles();
 		    request.getSession().setAttribute("listeArticles", listeArticles);
+		    request.setAttribute("resultat", "Article(s) supprimé(s).");
 		}
 		
 		request.getRequestDispatcher("/connexionAdmin.jsp").forward(request, response);
