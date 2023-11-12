@@ -105,7 +105,7 @@
 			    </div>
 			    <div class="form-group">
 			      <label for="quantite" class="form-label mt-1">Quantité</label>
-			      <input type="text" class="form-control" id="quantite" name="quantite" required>		      
+			      <input type="number" class="form-control" id="quantite" name="quantite" required>		      
 			    </div>
 			    <div class="form-group">
 			      <label for="categorieSelect" class="form-label mt-1">Catégorie</label>
@@ -128,11 +128,32 @@
 		  
 		  <div class="tab-pane fade" id="categorie" role="tabpanel">
 		    
+		    <form action="CommerceServlet?flag=suppressionCategories" method="post">
+			    <table class="table table-hover mt-2">
+				  <thead>
+				    <tr>
+				      <th scope="col">Désignation</th>
+				      <th scope="col" class="text-center"><button type="submit" class="btn btn-outline-primary p-0" id="suppCatButton">Supprimer</button></th>
+				    </tr>
+				  </thead>
+				  <tbody>	
+				  	<c:forEach items="${categories}" var="categorie">		    
+					    <tr>
+					      <td>${categorie.designation}</a></td>				     
+					      <td class="text-center">
+					      	<input class="form-check-input" type="checkbox" name="categoriesIds" value="${categorie.id}"/>
+					      </td>
+					    </tr>	
+				    </c:forEach>		   			   
+				  </tbody>
+				</table>
+			</form>	
+		    
 		    <form action="CommerceServlet?flag=ajoutCategorie" method="POST">
 			  <fieldset>
 			   
 			    <div class="form-group">
-			      <label for="categorie" class="form-label mt-2">Catégorie</label>
+			      <label for="categorie" class="form-label mt-2">Ajout catégorie</label>
 			      <input type="text" class="form-control" id="categorie" name="categorie" autofocus="autofocus" required>		      
 			    </div>
 			    

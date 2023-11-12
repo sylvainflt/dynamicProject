@@ -17,7 +17,17 @@ function validationSuppression(event){
 	}
 }
 
-export function updateArticle(event){
-	event.preventDefault()
-	alert("update "+event.target.value)
+suppCatButton.addEventListener("click", validationSupCat)
+
+function validationSupCat(event){
+	let checkboxes = document.querySelectorAll('input[name="categoriesIds"]:checked')
+	if( checkboxes.length < 1){
+		event.preventDefault()
+		alert("Veuillez cocher les catégories à supprimer.")
+	}else{
+		if(!confirm("Etes vous sur de vouloir supprimer les catégories cochés ?")){
+			event.preventDefault()
+		}
+		
+	}
 }

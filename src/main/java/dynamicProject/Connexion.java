@@ -249,6 +249,22 @@ public class Connexion {
 		
 	}
 
+	public void supprimerCategorie(String id) {
+		
+		Connection cnt = this.myCnx();		
+		PreparedStatement ps;
+		
+		try {
+			
+			ps = cnt.prepareStatement("DELETE FROM categorie WHERE idCategorie = "+id);
+			ps.execute();							
+						
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+		
+	}
+
 	
 	public static void main(String[] args) throws SQLException {
 		Connexion cn = new Connexion();
@@ -269,6 +285,7 @@ public class Connexion {
 		cn.cloturerConnexion();
 	}
 
+	
 	
 	
 	

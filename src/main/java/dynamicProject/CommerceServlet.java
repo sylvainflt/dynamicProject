@@ -87,9 +87,30 @@ public class CommerceServlet extends HttpServlet {
 			
 			this.doArticleModifieEnvoi(request, response);
 			
+		} else if (request.getParameter("flag").equals("suppressionCategories")){
+			
+			this.doSupprimerCategories(request, response);
+			
 		} else {
 			this.doGet(request, response);
 		}
+	}
+
+	private void doSupprimerCategories(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		String[] cochesCategories = request.getParameterValues("categoriesIds");
+		
+		if(cochesCategories != null && cochesCategories.length > 0) {
+			for ( String coche : cochesCategories ) {
+				co.supprimerCategorie(coche);
+			}
+			
+			List<Categorie> categories = co.getCategories();
+		    request.getSession().setAttribute("categories", categories);
+		}
+		
+		request.getRequestDispatcher("/connexionAdmin.jsp").forward(request, response);
+		
 	}
 
 	private void doArticleModifieEnvoi(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

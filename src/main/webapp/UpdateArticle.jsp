@@ -45,8 +45,10 @@
 	</nav>
 
 	<h2 class="text-center mt-4">Bienvenue administrateur : ${user}</h2>
+	
+	<h3 class="text-center mt-4">Modification d'article</h2>
 		
-	<div class="col-5 mt-4 mx-auto">
+	<div class="col-5 mt-2 mx-auto">
 		<form action="CommerceServlet?flag=articleModifieEnvoi" method="POST">
 			<div class="form-group d-none">
 		      	<label>id</label>
@@ -62,7 +64,7 @@
 			</div>
 			<div class="form-group">
 				<label>Quantité</label>
-				<input type="text" class="form-control" name="quantite" value="${article.quantite}">
+				<input type="number" class="form-control" name="quantite" value="${article.quantite}">
 			</div>				
 			<div class="form-group">
 				<label>Catégorie</label>
