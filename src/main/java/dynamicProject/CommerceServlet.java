@@ -70,8 +70,9 @@ public class CommerceServlet extends HttpServlet {
 				a.setImageFile(im.getName());
 				
 	            Blob blob = im.getImgAsBlob(); //blob of image from db                     
-				            
-	            imgDataBase64 = new String(Base64.getEncoder().encode(blob.getBytes(1,(int)blob.length())));
+				if(blob != null) {            
+					imgDataBase64 = new String(Base64.getEncoder().encode(blob.getBytes(1,(int)blob.length())));
+				}
             }
             
 			request.setAttribute("article", a);
@@ -154,6 +155,7 @@ public class CommerceServlet extends HttpServlet {
 		int quantite = Integer.parseInt(request.getParameter("quantite"));
 		int categorie = Integer.parseInt(request.getParameter("categorie"));
 		String imageFile = request.getParameter("imageFile");
+		String newImageFile = request.getParameter("newImageFile");
 		
 		try {
 			validationDesignationArticle(designation);
@@ -164,8 +166,10 @@ public class CommerceServlet extends HttpServlet {
 		if(erreurs.isEmpty()) {
 			resultat = "Article modifié.";	
 			Article a = null;
-			if(imageFile != null) {
+			System.out.println("newImageFile "+newImageFile);
+			if(newImageFile != null) {
 				a = new Article(id, designation, prixUnitaire, quantite, categorie, "", imageFile);
+				a.setNewImageFile(newImageFile);
 			}else {
 				a = new Article(id, designation, prixUnitaire, quantite, categorie, "");
 			}

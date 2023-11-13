@@ -83,8 +83,12 @@
 				  </select>		      
 			</div>	
 			<div class="form-group">
+				<label for="newImageFile">Image</label>
+				<input class="form-control" type="file" id="newImageFile" name="newImageFile">			      
+			</div>
+			<div class="form-group d-none">
 				<label for="imageFile">Image</label>
-				<input class="form-control" type="file" id="imageFile" name="imageFile">			      
+				<input class="form-control" type="text" id="imageFile" name="imageFile" value="${article.imageFile}">			      
 			</div>
 			<br/>			    			   
 				

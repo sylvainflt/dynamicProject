@@ -66,6 +66,7 @@
 			  	<table class="table table-hover mt-2">
 				  <thead>
 				    <tr>
+				      <th scope="col">Image</th>
 				      <th scope="col">Désignation</th>
 				      <th scope="col">Prix unitaire</th>
 				      <th scope="col">Quantité</th>
@@ -76,6 +77,11 @@
 				  <tbody>	
 				  	<c:forEach items="${listeArticles}" var="article">		    
 					    <tr>
+					      <td>
+					      	<div class="text-center">
+								<img src="data:image/jpg;base64,${article.image}" width="20" height="20"></img>
+							</div>	
+					      </td>	
 					      <td><a href="CommerceServlet?flag=modifierArticle&id=${article.id}" id="article${article.id}">${article.designation}</a></td>
 					      <td>${article.prixUnitaire}</td>
 					      <td>${article.quantite}</td>

@@ -1,5 +1,6 @@
 package dynamicProject;
 
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 public class Connexion {
@@ -17,7 +19,7 @@ public class Connexion {
 		
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-			cn = DriverManager.getConnection("jdbc:mariadb://localhost/commerce", "root", "");
+			cn = DriverManager.getConnection("jdbc:mariadb://localhost/projetCommerce", "root", "");
 			System.out.println("connexion réussie");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -147,7 +149,7 @@ public class Connexion {
 			System.out.println(a.getImageFile());
 			
 			ps = cnt.prepareStatement("INSERT INTO image (name, img, idArticle) \n"
-					+ "VALUES('"+a.getImageFile()+"', LOAD_FILE('C:/Users/59013-15-09/Downloads/"+a.getImageFile()+"'),"+idArticle+")");
+					+ "VALUES('"+a.getImageFile()+"', LOAD_FILE('/home/sylvain/Images/"+a.getImageFile()+"'),"+idArticle+")");
 			ps.execute();
 						
 		} catch (SQLException e) {
@@ -170,10 +172,15 @@ public class Connexion {
 								+"' WHERE idArticle = "+a.getId());			
 			ps.execute();		
 			
-			if(a.getImageFile() != null) {
+			System.out.println("a.getNewImageFile() "+a.getNewImageFile());
+			System.out.println("a.getImageFile() "+a.getImageFile());
+			
+			if(a.getNewImageFile() != null) {
 				
-				ps = cnt.prepareStatement("UPDATE image SET img = LOAD_FILE('C:/Users/59013-15-09/Downloads/"+a.getImageFile()									
-								+"') WHERE name = "+a.getImageFile());			
+				ps = cnt.prepareStatement("UPDATE image SET "
+						+ "name = '"+a.getNewImageFile()
+						+ "', img = LOAD_FILE('/home/sylvain/Images/"+a.getNewImageFile()									
+								+"') WHERE name like '"+a.getImageFile()+"'");			
 				ps.execute();
 				
 			}
@@ -219,9 +226,32 @@ public class Connexion {
 					+ "from article a, categorie c "
 					+ "where a.idCategorie = c.idCategorie");
 			
+			Article article = null;
+					
 			while(rs.next()) {
-				listeArticles.add(new Article(rs.getInt(1), rs.getString(2), rs.getFloat(3), rs.getInt(4),
-						rs.getInt(5), rs.getString(6)));
+				
+				article = new Article(rs.getInt(1), rs.getString(2), rs.getFloat(3), rs.getInt(4),
+						rs.getInt(5), rs.getString(6));
+				
+				
+				Image im = getImage(rs.getInt(1));
+				
+				String imgDataBase64 = null;
+						
+				if(im != null) {
+					
+					article.setImageFile(im.getName());
+					
+		            Blob blob = im.getImgAsBlob(); //blob of image from db                     
+					            
+		            if(blob != null) {
+			            imgDataBase64 = new String(Base64.getEncoder().encode(blob.getBytes(1,(int)blob.length())));
+			            
+			            article.setImage(imgDataBase64);
+		            }
+	            }
+				
+				listeArticles.add(article);
 			}
 			
 		} catch (SQLException e) {

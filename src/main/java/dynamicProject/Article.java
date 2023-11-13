@@ -9,6 +9,8 @@ public class Article {
 	private int idCategorie;
 	private String categorie;
 	private String imageFile;
+	private String image;
+	private String newImageFile;
 	
 	public Article(String designation, float prixUnitaire, int quantite, int idCategorie, String imageFile) {
 		super();
@@ -70,6 +72,22 @@ public class Article {
 
 	public void setImageFile(String imageFile) {
 		this.imageFile = imageFile;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public String getNewImageFile() {
+		return newImageFile;
+	}
+
+	public void setNewImageFile(String newImageFile) {
+		this.newImageFile = newImageFile;
 	}
 	
 	
