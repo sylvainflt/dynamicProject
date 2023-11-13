@@ -50,21 +50,26 @@
 		
 	<div class="col-5 mt-2 mx-auto">
 		<form action="CommerceServlet?flag=articleModifieEnvoi" method="POST">
+		
+			<div class="text-center">
+				<img src="data:image/jpg;base64,${image}" width="100" height="100"></img>
+			</div>			
+		
 			<div class="form-group d-none">
 		      	<label>id</label>
 		        <input type="text" class="form-control" name="id" value="${article.id}">
 		    </div>
 			<div class="form-group">
 		      	<label>Désignation</label>
-		        <input type="text" class="form-control" name="designation" value="${article.designation}">
+		        <input type="text" class="form-control" name="designation" value="${article.designation}" required>
 		    </div>
 		       <div class="form-group">
 		        <label>Prix unitaire</label>
-				<input type="text" class="form-control" name="prixUnitaire" value="${article.prixUnitaire}">
+				<input type="text" class="form-control" name="prixUnitaire" value="${article.prixUnitaire}" required>
 			</div>
 			<div class="form-group">
 				<label>Quantité</label>
-				<input type="number" class="form-control" name="quantite" value="${article.quantite}">
+				<input type="number" class="form-control" name="quantite" value="${article.quantite}" required>
 			</div>				
 			<div class="form-group">
 				<label>Catégorie</label>
@@ -77,7 +82,10 @@
 				    </c:forEach>
 				  </select>		      
 			</div>	
-			
+			<div class="form-group">
+				<label for="imageFile">Image</label>
+				<input class="form-control" type="file" id="imageFile" name="imageFile">			      
+			</div>
 			<br/>			    			   
 				
 		    <button type="submit" value="Valider" class="btn btn-primary mt-1">Valider</button>

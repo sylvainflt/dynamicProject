@@ -1,9 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="ISO-8859-1">
+	<meta charset="UTF-8">
 	<title>Inscription</title>
 	<!-- <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/quartz/bootstrap.min.css" rel="stylesheet"> -->
 	<link rel="stylesheet" href="css/bootstrap.min.css">
@@ -66,16 +66,16 @@
 				      %>
 				    </div>
 				    <div class="form-group">
-				      <label for="fname" class="form-label mt-2">Prénom</label>
+				      <label for="fname" class="form-label mt-2">PrÃ©nom</label>
 				      <input type="text" class="form-control" id="fname" name="fname">	
-				      <small id="invalidPrenom" class="invalid-feedback hidden">Le prénom doit contenir au moins 3 caractères.</small>	      
+				      <small id="invalidPrenom" class="invalid-feedback hidden">Le prÃ©nom doit contenir au moins 3 caractÃ¨res.</small>	      
 				    </div>
 				    <div class="form-group">
 				      <label for="adress" class="form-label mt-2">Adresse</label>
 				      <input type="text" class="form-control" id="adress" name="adress" required>		      
 				    </div>
 				    <div class="form-group">
-				      <label for="tel" class="form-label mt-2">Tél</label>
+				      <label for="tel" class="form-label mt-2">TÃ©l</label>
 				      <input type="text" class="form-control" id="tel" name="tel" required>		      
 				    </div>
 				    <div class="form-group">
@@ -86,7 +86,7 @@
 				      <label class="form-label mt-2">Sexe</label>
 				      <div class="form-check">
 					      <input type="radio" class="form-check-input" id="sexF" name="sex" value="F" checked>	
-					      <label for="sexF">Féminin</label>
+					      <label for="sexF">FÃ©minin</label>
 					  </div>
 				      <div class="form-check">
 					      <input type="radio" class="form-check-input" id="sexH" name="sex" value="H">	

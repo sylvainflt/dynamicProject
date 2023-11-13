@@ -1,10 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="ISO-8859-1">
+	<meta charset="UTF-8">
 	<title>connexion administrateur</title>
 	<!--  <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/quartz/bootstrap.min.css" rel="stylesheet"> -->
 	<link rel="stylesheet" href="css/bootstrap.min.css">
@@ -66,11 +66,11 @@
 			  	<table class="table table-hover mt-2">
 				  <thead>
 				    <tr>
-				      <th scope="col">Désignation</th>
+				      <th scope="col">DÃ©signation</th>
 				      <th scope="col">Prix unitaire</th>
-				      <th scope="col">Quantité</th>
-				      <th scope="col">Catégorie</th>
-				      <th scope="col"><button type="submit" class="btn btn-outline-primary p-0" id="suppButton">Supprimer</button></th>
+				      <th scope="col">QuantitÃ©</th>
+				      <th scope="col">CatÃ©gorie</th>
+				      <th scope="col" class="text-center"><button type="submit" class="btn btn-outline-primary p-0" id="suppButton">Supprimer</button></th>
 				    </tr>
 				  </thead>
 				  <tbody>	
@@ -96,7 +96,7 @@
 			  <fieldset>
 			   
 			    <div class="form-group">
-			      <label for="designation" class="form-label mt-2">Désignation</label>
+			      <label for="designation" class="form-label mt-2">DÃ©signation</label>
 			      <input type="text" class="form-control" id="designation" name="designation" autofocus="autofocus" required>		      
 			    </div>
 			    <div class="form-group">
@@ -104,18 +104,21 @@
 			      <input type="text" class="form-control" id="prixUnitaire" name="prixUnitaire" required>		      
 			    </div>
 			    <div class="form-group">
-			      <label for="quantite" class="form-label mt-1">Quantité</label>
+			      <label for="quantite" class="form-label mt-1">QuantitÃ©</label>
 			      <input type="number" class="form-control" id="quantite" name="quantite" required>		      
 			    </div>
 			    <div class="form-group">
-			      <label for="categorieSelect" class="form-label mt-1">Catégorie</label>
+			      <label for="categorieSelect" class="form-label mt-1">CatÃ©gorie</label>
 			      <select class="form-control" id="categorieSelect" name="categorie">		
 			      	<c:forEach items="${categories}" var="categorie">
 				        <option class="text-info" value="${categorie.id}">${categorie.designation}</option>
 				    </c:forEach>
 				  </select>  
 			    </div>
-			    
+			    <div class="form-group">
+					<label for="imageFile">Image</label>
+					<input class="form-control" type="file" id="imageFile" name="imageFile">			      
+				</div>
 			    <br/>			    			   
 			
 			    <button type="submit" value="Valider" class="btn btn-primary mt-1">Valider</button>
@@ -132,7 +135,7 @@
 			    <table class="table table-hover mt-2">
 				  <thead>
 				    <tr>
-				      <th scope="col">Désignation</th>
+				      <th scope="col">DÃ©signation</th>
 				      <th scope="col" class="text-center"><button type="submit" class="btn btn-outline-primary p-0" id="suppCatButton">Supprimer</button></th>
 				    </tr>
 				  </thead>
@@ -153,7 +156,7 @@
 			  <fieldset>
 			   
 			    <div class="form-group">
-			      <label for="categorie" class="form-label mt-2">Ajout catégorie</label>
+			      <label for="categorie" class="form-label mt-2">Ajout catÃ©gorie</label>
 			      <input type="text" class="form-control" id="categorie" name="categorie" autofocus="autofocus" required>		      
 			    </div>
 			    
@@ -181,7 +184,7 @@
 	      </div>
 	      <div class="modal-body">
 	      	<div class="form-group">
-		      	<label>Désignation</label>
+		      	<label>DÃ©signation</label>
 		        <input type="text" value="${article.designation}">
 		    </div>
 	        <div class="form-group">
@@ -189,11 +192,11 @@
 				<input type="text" value="${article.prixUnitaire}">
 			</div>
 			<div class="form-group">
-				<label>Quantité</label>
+				<label>QuantitÃ©</label>
 				<input type="text" value="${article.quantite}">
 			</div>				
 			<div class="form-group">
-				<label>Catégorie</label>
+				<label>CatÃ©gorie</label>
 				<input type="text" value="${article.categorie}">			      
 			</div>	    
 	      </div>

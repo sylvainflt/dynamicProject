@@ -6,10 +6,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 /**
  * Servlet implementation class CommerceServlet
@@ -52,7 +57,31 @@ public class CommerceServlet extends HttpServlet {
 		
 		Article a = co.getArticle(id);
 		
-		request.setAttribute("article", a);
+		
+		
+		try {
+			
+			Image im = co.getImage(id);
+					
+			String imgDataBase64 = null;
+					
+			if(im != null) {
+				
+				a.setImageFile(im.getName());
+				
+	            Blob blob = im.getImgAsBlob(); //blob of image from db                     
+				            
+	            imgDataBase64 = new String(Base64.getEncoder().encode(blob.getBytes(1,(int)blob.length())));
+            }
+            
+			request.setAttribute("article", a);
+			request.setAttribute("image", imgDataBase64);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}  
+		
 		
 		request.getRequestDispatcher("/UpdateArticle.jsp").forward(request, response);
 		
@@ -124,6 +153,7 @@ public class CommerceServlet extends HttpServlet {
 		float prixUnitaire = Float.parseFloat(request.getParameter("prixUnitaire"));
 		int quantite = Integer.parseInt(request.getParameter("quantite"));
 		int categorie = Integer.parseInt(request.getParameter("categorie"));
+		String imageFile = request.getParameter("imageFile");
 		
 		try {
 			validationDesignationArticle(designation);
@@ -132,8 +162,13 @@ public class CommerceServlet extends HttpServlet {
 		}
 		
 		if(erreurs.isEmpty()) {
-			resultat = "Article modifié.";			
-			Article a = new Article(id, designation, prixUnitaire, quantite, categorie, "");
+			resultat = "Article modifié.";	
+			Article a = null;
+			if(imageFile != null) {
+				a = new Article(id, designation, prixUnitaire, quantite, categorie, "", imageFile);
+			}else {
+				a = new Article(id, designation, prixUnitaire, quantite, categorie, "");
+			}
 			co.modifierArticle(a);
 			
 		}else {
@@ -177,6 +212,7 @@ public class CommerceServlet extends HttpServlet {
 		float prixUnitaire = Float.parseFloat(request.getParameter("prixUnitaire"));
 		int quantite = Integer.parseInt(request.getParameter("quantite"));
 		int categorie = Integer.parseInt(request.getParameter("categorie"));
+		String imageFile = request.getParameter("imageFile");
 		
 		try {
 			validationDesignationArticle(designation);
@@ -186,7 +222,7 @@ public class CommerceServlet extends HttpServlet {
 		
 		if(erreurs.isEmpty()) {
 			resultat = "Article ajoutée.";			
-			Article a = new Article(designation, prixUnitaire, quantite, categorie);
+			Article a = new Article(designation, prixUnitaire, quantite, categorie, imageFile);
 			co.ajouterArticle(a);
 			
 		}else {

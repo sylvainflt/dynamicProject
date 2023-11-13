@@ -17,7 +17,7 @@ public class Connexion {
 		
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-			cn = DriverManager.getConnection("jdbc:mariadb://localhost/projetCommerce", "root", "");
+			cn = DriverManager.getConnection("jdbc:mariadb://localhost/commerce", "root", "");
 			System.out.println("connexion réussie");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -128,12 +128,27 @@ public class Connexion {
 		
 		Connection cnt = this.myCnx();		
 		PreparedStatement ps;
+		Statement st;
+		int idArticle = 0;
 		
 		try {
 			
 			ps = cnt.prepareStatement("INSERT INTO article (designation, pu, qty, idCategorie) \n"
 					+ "VALUES('"+a.getDesignation()+"','"+a.getPrixUnitaire()+"','"+a.getQuantite()+"','"+a.getIdCategorie()+"')");
-			ps.execute();							
+			ps.execute();
+			
+			st = cnt.createStatement();
+			ResultSet rs = st.executeQuery("select max(idArticle) from article");			
+			if(rs.next()) {
+				idArticle = rs.getInt(1);
+				System.out.println(idArticle);
+			}
+			
+			System.out.println(a.getImageFile());
+			
+			ps = cnt.prepareStatement("INSERT INTO image (name, img, idArticle) \n"
+					+ "VALUES('"+a.getImageFile()+"', LOAD_FILE('C:/Users/59013-15-09/Downloads/"+a.getImageFile()+"'),"+idArticle+")");
+			ps.execute();
 						
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -148,11 +163,20 @@ public class Connexion {
 		
 		try {
 			
+			
 			ps = cnt.prepareStatement("UPDATE article SET designation = '"+a.getDesignation()
-									+"', pu = '"+a.getPrixUnitaire()+"', qty = '"+a.getQuantite()
-									+"', idCategorie = '"+a.getIdCategorie()					
-									+"' WHERE idArticle = "+a.getId());
-			ps.execute();							
+								+"', pu = '"+a.getPrixUnitaire()+"', qty = '"+a.getQuantite()
+								+"', idCategorie = '"+a.getIdCategorie()					
+								+"' WHERE idArticle = "+a.getId());			
+			ps.execute();		
+			
+			if(a.getImageFile() != null) {
+				
+				ps = cnt.prepareStatement("UPDATE image SET img = LOAD_FILE('C:/Users/59013-15-09/Downloads/"+a.getImageFile()									
+								+"') WHERE name = "+a.getImageFile());			
+				ps.execute();
+				
+			}
 						
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -233,6 +257,31 @@ public class Connexion {
 		
 	}
 	
+	public Image getImage(int id) {
+		
+		Connection cnt = this.myCnx();
+		Statement st;
+		Image im = null;
+		
+		try {
+			
+			st = cnt.createStatement();
+			ResultSet rs = st.executeQuery("select i.name, i.img, i.idArticle "
+					+ "from image i"
+					+ " where i.idArticle = "+id);
+			
+			if(rs.next()) {
+				im = new Image(rs.getString(1), rs.getBlob(2), rs.getInt(3));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return im;	
+		
+	}
+	
 	public void supprimerArticle(String id) {
 
 		Connection cnt = this.myCnx();		
@@ -284,8 +333,6 @@ public class Connexion {
 		
 		cn.cloturerConnexion();
 	}
-
-	
 	
 	
 	

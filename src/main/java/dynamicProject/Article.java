@@ -8,13 +8,15 @@ public class Article {
 	private int quantite;
 	private int idCategorie;
 	private String categorie;
+	private String imageFile;
 	
-	public Article(String designation, float prixUnitaire, int quantite, int idCategorie) {
+	public Article(String designation, float prixUnitaire, int quantite, int idCategorie, String imageFile) {
 		super();
 		this.designation = designation;
 		this.prixUnitaire = prixUnitaire;
 		this.quantite = quantite;
 		this.idCategorie = idCategorie;
+		this.imageFile = imageFile;
 	}
 
 	public Article(int id, String designation, float prixUnitaire, int quantite, int idCategorie, String categorie) {
@@ -27,6 +29,17 @@ public class Article {
 		this.categorie = categorie;
 	}
 
+	public Article(int id, String designation, float prixUnitaire, int quantite, int idCategorie, String categorie, String imageFile) {
+		super();
+		this.id = id;
+		this.designation = designation;
+		this.prixUnitaire = prixUnitaire;
+		this.quantite = quantite;
+		this.idCategorie = idCategorie;
+		this.categorie = categorie;
+		this.imageFile = imageFile;
+	}
+	
 	public String getDesignation() {
 		return designation;
 	}
@@ -50,6 +63,15 @@ public class Article {
 	public int getId() {
 		return id;
 	}
+
+	public String getImageFile() {
+		return imageFile;
+	}
+
+	public void setImageFile(String imageFile) {
+		this.imageFile = imageFile;
+	}
+	
 	
 	
 	
