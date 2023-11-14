@@ -16,13 +16,14 @@ public class Connexion {
 
 	private Connection cn = null;
 	
-	private static final String imagesPath = "C:/Users/59013-15-09/Downloads/";
+	//private static final String imagesPath = "C:/Users/59013-15-09/Downloads/";
+	private static final String imagesPath = "/home/sylvain/Images/";
 	
 	public Connection myCnx() {
 		
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-			cn = DriverManager.getConnection("jdbc:mariadb://localhost/commerce", "root", "");
+			cn = DriverManager.getConnection("jdbc:mariadb://localhost/projetCommerce", "root", "");
 			System.out.println("connexion réussie");
 		} catch (Exception e) {
 			e.printStackTrace();
