@@ -1,5 +1,8 @@
 package dynamicProject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Article {
 
 	private int id;
@@ -11,6 +14,15 @@ public class Article {
 	private String imageFile;
 	private String image;
 	private String newImageFile;
+	private Map<String, String> images = new HashMap<String, String>();
+	
+	public Article(String designation, float prixUnitaire, int quantite, int idCategorie) {
+		super();
+		this.designation = designation;
+		this.prixUnitaire = prixUnitaire;
+		this.quantite = quantite;
+		this.idCategorie = idCategorie;
+	}
 	
 	public Article(String designation, float prixUnitaire, int quantite, int idCategorie, String imageFile) {
 		super();
@@ -88,6 +100,10 @@ public class Article {
 
 	public void setNewImageFile(String newImageFile) {
 		this.newImageFile = newImageFile;
+	}
+
+	public Map<String, String> getImages() {
+		return images;
 	}
 	
 	

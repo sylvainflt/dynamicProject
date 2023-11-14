@@ -9,17 +9,20 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Iterator;
 import java.util.List;
 
 public class Connexion {
 
 	private Connection cn = null;
 	
+	private static final String imagesPath = "C:/Users/59013-15-09/Downloads/";
+	
 	public Connection myCnx() {
 		
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-			cn = DriverManager.getConnection("jdbc:mariadb://localhost/projetCommerce", "root", "");
+			cn = DriverManager.getConnection("jdbc:mariadb://localhost/commerce", "root", "");
 			System.out.println("connexion réussie");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -143,14 +146,17 @@ public class Connexion {
 			ResultSet rs = st.executeQuery("select max(idArticle) from article");			
 			if(rs.next()) {
 				idArticle = rs.getInt(1);
-				System.out.println(idArticle);
 			}
 			
-			System.out.println(a.getImageFile());
-			
-			ps = cnt.prepareStatement("INSERT INTO image (name, img, idArticle) \n"
-					+ "VALUES('"+a.getImageFile()+"', LOAD_FILE('/home/sylvain/Images/"+a.getImageFile()+"'),"+idArticle+")");
-			ps.execute();
+			Iterator<String> imageFilesIt = a.getImages().keySet().iterator();
+			while(imageFilesIt.hasNext()) {	
+				
+				String imageFile = imageFilesIt.next();
+				
+				ps = cnt.prepareStatement("INSERT INTO image (name, img, idArticle) \n"
+						+ "VALUES('"+imageFile+"', LOAD_FILE('"+imagesPath+imageFile+"'),"+idArticle+")");
+				ps.execute();
+			}
 						
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -163,8 +169,7 @@ public class Connexion {
 		Connection cnt = this.myCnx();		
 		PreparedStatement ps;
 		
-		try {
-			
+		try {			
 			
 			ps = cnt.prepareStatement("UPDATE article SET designation = '"+a.getDesignation()
 								+"', pu = '"+a.getPrixUnitaire()+"', qty = '"+a.getQuantite()
@@ -172,16 +177,25 @@ public class Connexion {
 								+"' WHERE idArticle = "+a.getId());			
 			ps.execute();		
 			
-			System.out.println("a.getNewImageFile() "+a.getNewImageFile());
-			System.out.println("a.getImageFile() "+a.getImageFile());
-			
-			if(a.getNewImageFile() != null) {
+			// s'il y a des fichiers images saisis
+			if(!a.getImages().isEmpty()) {
 				
-				ps = cnt.prepareStatement("UPDATE image SET "
-						+ "name = '"+a.getNewImageFile()
-						+ "', img = LOAD_FILE('/home/sylvain/Images/"+a.getNewImageFile()									
-								+"') WHERE name like '"+a.getImageFile()+"'");			
+				// on supprime d'abord les images existantes en base
+				ps = cnt.prepareStatement("DELETE FROM image "
+						+" WHERE idArticle = "+a.getId());			
 				ps.execute();
+				
+				// puis on enregistre les nouvelles
+				
+				Iterator<String> imageFilesIt = a.getImages().keySet().iterator();
+				while(imageFilesIt.hasNext()) {	
+					
+					String imageFile = imageFilesIt.next();
+					
+					ps = cnt.prepareStatement("INSERT INTO image (name, img, idArticle) \n"
+							+ "VALUES('"+imageFile+"', LOAD_FILE('"+imagesPath+imageFile+"'),"+a.getId()+")");
+					ps.execute();
+				}
 				
 			}
 						
@@ -234,21 +248,25 @@ public class Connexion {
 						rs.getInt(5), rs.getString(6));
 				
 				
-				Image im = getImage(rs.getInt(1));
+				List<Image> listeImages = getImages(rs.getInt(1));
 				
 				String imgDataBase64 = null;
 						
-				if(im != null) {
+				Iterator<Image> imageIt = listeImages.iterator();
+				
+				while(imageIt.hasNext()) {
 					
-					article.setImageFile(im.getName());
+					Image im = imageIt.next();
 					
-		            Blob blob = im.getImgAsBlob(); //blob of image from db                     
-					            
-		            if(blob != null) {
-			            imgDataBase64 = new String(Base64.getEncoder().encode(blob.getBytes(1,(int)blob.length())));
-			            
-			            article.setImage(imgDataBase64);
-		            }
+					if(im != null) {
+			            Blob blob = im.getImgAsBlob(); //blob of image from db                     
+						            
+			            if(blob != null) {
+				            imgDataBase64 = new String(Base64.getEncoder().encode(blob.getBytes(1,(int)blob.length())));
+				            
+				            article.getImages().put(im.getName(), imgDataBase64);
+			            }
+					}
 	            }
 				
 				listeArticles.add(article);
@@ -260,6 +278,61 @@ public class Connexion {
 		}
 		return listeArticles;	
 	}
+	
+	public List<Article> getListeArticles(int categorieId) {
+		
+		Connection cnt = this.myCnx();
+		Statement st;
+		List<Article> listeArticles = new ArrayList<Article>();
+		
+		try {
+			
+			st = cnt.createStatement();
+			ResultSet rs = st.executeQuery("select a.idArticle, a.designation, a.pu, a.qty, a.idCategorie, c.designation "
+					+ "from article a, categorie c "
+					+ "where a.idCategorie = c.idCategorie "
+					+ "and a.idCategorie = "+categorieId);
+			
+			Article article = null;
+					
+			while(rs.next()) {
+				
+				article = new Article(rs.getInt(1), rs.getString(2), rs.getFloat(3), rs.getInt(4),
+						rs.getInt(5), rs.getString(6));
+				
+				
+				List<Image> listeImages = getImages(rs.getInt(1));
+				
+				String imgDataBase64 = null;
+						
+				Iterator<Image> imageIt = listeImages.iterator();
+				
+				while(imageIt.hasNext()) {
+					
+					Image im = imageIt.next();
+					
+					if(im != null) {
+			            Blob blob = im.getImgAsBlob(); //blob of image from db                     
+						            
+			            if(blob != null) {
+				            imgDataBase64 = new String(Base64.getEncoder().encode(blob.getBytes(1,(int)blob.length())));
+				            
+				            article.getImages().put(im.getName(), imgDataBase64);
+			            }
+					}
+	            }
+				
+				listeArticles.add(article);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return listeArticles;	
+		
+	}
+	
 	
 	public Article getArticle(int id) {
 		
@@ -287,11 +360,11 @@ public class Connexion {
 		
 	}
 	
-	public Image getImage(int id) {
+	public List<Image> getImages(int id) {
 		
 		Connection cnt = this.myCnx();
 		Statement st;
-		Image im = null;
+		List<Image> listeImages = new ArrayList<Image>();
 		
 		try {
 			
@@ -300,15 +373,15 @@ public class Connexion {
 					+ "from image i"
 					+ " where i.idArticle = "+id);
 			
-			if(rs.next()) {
-				im = new Image(rs.getString(1), rs.getBlob(2), rs.getInt(3));
+			while(rs.next()) {
+				listeImages.add(new Image(rs.getString(1), rs.getBlob(2), rs.getInt(3)));
 			}
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return im;	
+		return listeImages;	
 		
 	}
 	
@@ -318,6 +391,9 @@ public class Connexion {
 		PreparedStatement ps;
 		
 		try {
+			
+			ps = cnt.prepareStatement("DELETE FROM image WHERE idArticle = "+id);
+			ps.execute();
 			
 			ps = cnt.prepareStatement("DELETE FROM article WHERE idArticle = "+id);
 			ps.execute();							
@@ -363,6 +439,7 @@ public class Connexion {
 		
 		cn.cloturerConnexion();
 	}
+
 	
 	
 	

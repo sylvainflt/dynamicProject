@@ -12,6 +12,7 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -61,22 +62,29 @@ public class CommerceServlet extends HttpServlet {
 		
 		try {
 			
-			Image im = co.getImage(id);
+			List<Image> listeImages = co.getImages(id);
 					
 			String imgDataBase64 = null;
+			
+			Iterator<Image> imageIt = listeImages.iterator();
 					
-			if(im != null) {
+			while(imageIt.hasNext()) {
 				
-				a.setImageFile(im.getName());
+				Image im = imageIt.next();
 				
-	            Blob blob = im.getImgAsBlob(); //blob of image from db                     
-				if(blob != null) {            
-					imgDataBase64 = new String(Base64.getEncoder().encode(blob.getBytes(1,(int)blob.length())));
+				if(im != null) {
+		            Blob blob = im.getImgAsBlob(); //blob of image from db                     
+					            
+		            if(blob != null) {
+			            imgDataBase64 = new String(Base64.getEncoder().encode(blob.getBytes(1,(int)blob.length())));
+			            
+			            a.getImages().put(im.getName(), imgDataBase64);
+		            }
 				}
             }
             
 			request.setAttribute("article", a);
-			request.setAttribute("image", imgDataBase64);
+			//request.setAttribute("image", imgDataBase64);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -121,9 +129,31 @@ public class CommerceServlet extends HttpServlet {
 			
 			this.doSupprimerCategories(request, response);
 			
+		} else if (request.getParameter("flag").equals("selectCategorie")){
+			
+			this.doSelectCategories(request, response);
+			
 		} else {
 			this.doGet(request, response);
 		}
+	}
+
+	private void doSelectCategories(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		int categorieId = Integer.parseInt(request.getParameter("listeCatSelect")); 
+		
+		List<Article> listeArticles;
+		
+		if(categorieId != 0) {
+			listeArticles = co.getListeArticles(categorieId);
+		} else {
+			listeArticles = co.getListeArticles();
+		}
+	    
+	    request.getSession().setAttribute("listeArticles", listeArticles);
+		
+		request.getRequestDispatcher("/connexionAdmin.jsp").forward(request, response);
+		
 	}
 
 	private void doSupprimerCategories(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -154,8 +184,10 @@ public class CommerceServlet extends HttpServlet {
 		float prixUnitaire = Float.parseFloat(request.getParameter("prixUnitaire"));
 		int quantite = Integer.parseInt(request.getParameter("quantite"));
 		int categorie = Integer.parseInt(request.getParameter("categorie"));
-		String imageFile = request.getParameter("imageFile");
-		String newImageFile = request.getParameter("newImageFile");
+				
+		String newImageFile1 = request.getParameter("newImageFile1");
+		String newImageFile2 = request.getParameter("newImageFile2");
+		String newImageFile3 = request.getParameter("newImageFile3");
 		
 		try {
 			validationDesignationArticle(designation);
@@ -164,15 +196,15 @@ public class CommerceServlet extends HttpServlet {
 		}
 		
 		if(erreurs.isEmpty()) {
+			
 			resultat = "Article modifié.";	
-			Article a = null;
-			System.out.println("newImageFile "+newImageFile);
-			if(newImageFile != null) {
-				a = new Article(id, designation, prixUnitaire, quantite, categorie, "", imageFile);
-				a.setNewImageFile(newImageFile);
-			}else {
-				a = new Article(id, designation, prixUnitaire, quantite, categorie, "");
-			}
+			
+			Article a = new Article(id, designation, prixUnitaire, quantite, categorie, "");
+			
+			if(newImageFile1 != null && newImageFile1 != "") a.getImages().put(newImageFile1, "");
+			if(newImageFile2 != null && newImageFile2 != "") a.getImages().put(newImageFile2, "");
+			if(newImageFile3 != null && newImageFile3 != "") a.getImages().put(newImageFile3, "");
+				
 			co.modifierArticle(a);
 			
 		}else {
@@ -216,7 +248,10 @@ public class CommerceServlet extends HttpServlet {
 		float prixUnitaire = Float.parseFloat(request.getParameter("prixUnitaire"));
 		int quantite = Integer.parseInt(request.getParameter("quantite"));
 		int categorie = Integer.parseInt(request.getParameter("categorie"));
-		String imageFile = request.getParameter("imageFile");
+		
+		String imageFile1 = request.getParameter("imageFile1");
+		String imageFile2 = request.getParameter("imageFile2");
+		String imageFile3 = request.getParameter("imageFile3");
 		
 		try {
 			validationDesignationArticle(designation);
@@ -226,7 +261,12 @@ public class CommerceServlet extends HttpServlet {
 		
 		if(erreurs.isEmpty()) {
 			resultat = "Article ajoutée.";			
-			Article a = new Article(designation, prixUnitaire, quantite, categorie, imageFile);
+			Article a = new Article(designation, prixUnitaire, quantite, categorie);
+			
+			if(imageFile1 != null && imageFile1 != "") a.getImages().put(imageFile1, "");
+			if(imageFile2 != null && imageFile2 != "") a.getImages().put(imageFile2, "");
+			if(imageFile3 != null && imageFile3 != "") a.getImages().put(imageFile3, "");
+			
 			co.ajouterArticle(a);
 			
 		}else {
@@ -355,6 +395,7 @@ public class CommerceServlet extends HttpServlet {
 				    request.getSession().setAttribute("categories", categories);
 				    
 				    List<Article> listeArticles = co.getListeArticles();
+				    
 				    request.getSession().setAttribute("listeArticles", listeArticles);
 					
 					request.getRequestDispatcher("/connexionAdmin.jsp").forward(request, response);

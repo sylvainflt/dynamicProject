@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<%@ page import= "dynamicProject.*" %>
+<%@ page import= "java.util.*" %> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -62,6 +64,21 @@
 		</ul>
 		<div id="myTabContent" class="tab-content">
 		  <div class="tab-pane fade active show" id="listeArticles" role="tabpanel">
+		  
+		  	<form action="CommerceServlet?flag=selectCategorie" method="post">
+		  		<div class="form-group">
+			      <label for="listeCatSelect" class="form-label mt-1">Catégorie : </label>
+			      <select class="" id="listeCatSelect" name="listeCatSelect">		
+			      	<option class="text-info" value="0">Toutes</option>
+			      	<c:forEach items="${categories}" var="categorie">
+				        <option class="text-info" value="${categorie.id}">${categorie.designation}</option>
+				    </c:forEach>
+				  </select>  
+				  <button type="submit" value="Filtrer" class="btn btn-primary m-0 p-0">Filtrer</button>
+			    </div>
+			    
+		  	</form>
+		  
 		  	<form action="CommerceServlet?flag=suppressionArticles" method="post">
 			  	<table class="table table-hover mt-2">
 				  <thead>
@@ -75,22 +92,43 @@
 				    </tr>
 				  </thead>
 				  <tbody>	
-				  	<c:forEach items="${listeArticles}" var="article">		    
+				  	
+				  	<%
+				  		List<Article> listeArticles = (List<Article>) request.getSession().getAttribute("listeArticles");
+				  		Iterator<Article> itArticle = listeArticles.iterator();
+				  		
+				  		while(itArticle.hasNext()){
+				  			Article article = itArticle.next();
+				  	%>	    
 					    <tr>
 					      <td>
 					      	<div class="text-center">
-								<img src="data:image/jpg;base64,${article.image}" width="20" height="20"></img>
+					      		<%
+									Iterator<String> itIms = article.getImages().values().iterator();
+									while(itIms.hasNext()){
+										String image = itIms.next();
+								%>
+									<img src="data:image/jpg;base64,<%= image %>" width="20" height="20"></img>
+								<%
+									}
+								%>	
 							</div>	
 					      </td>	
-					      <td><a href="CommerceServlet?flag=modifierArticle&id=${article.id}" id="article${article.id}">${article.designation}</a></td>
-					      <td>${article.prixUnitaire}</td>
-					      <td>${article.quantite}</td>
-					      <td>${article.categorie}</td>
+					      <td>
+					      	<a href="CommerceServlet?flag=modifierArticle&id=<%= article.getId() %>" id="article<%= article.getId() %>">
+					      		<%= article.getDesignation() %>
+					      	</a>
+					      </td>
+					      <td><%=article.getPrixUnitaire()%></td>
+					      <td><%=article.getQuantite()%></td>
+					      <td><%=article.getCategorie()%></td>
 					      <td class="text-center">
-					      	<input class="form-check-input" type="checkbox" name="articlesIds" value="${article.id}"/>
+					      	<input class="form-check-input" type="checkbox" name="articlesIds" value="<%=article.getId()%>"/>
 					      </td>
 					    </tr>	
-				    </c:forEach>		   			   
+				    <%
+				  		}
+				    %>	   			   
 				  </tbody>
 				</table>
 			</form>	
@@ -122,8 +160,16 @@
 				  </select>  
 			    </div>
 			    <div class="form-group">
-					<label for="imageFile">Image</label>
-					<input class="form-control" type="file" id="imageFile" name="imageFile">			      
+					<label for="imageFile1">Image 1</label>
+					<input class="form-control" type="file" id="imageFile1" name="imageFile1">			      
+				</div>
+				<div class="form-group">
+					<label for="imageFile2">Image 2</label>
+					<input class="form-control" type="file" id="imageFile2" name="imageFile2">			      
+				</div>
+				<div class="form-group">
+					<label for="imageFile3">Image 3</label>
+					<input class="form-control" type="file" id="imageFile3" name="imageFile3">			      
 				</div>
 			    <br/>			    			   
 			

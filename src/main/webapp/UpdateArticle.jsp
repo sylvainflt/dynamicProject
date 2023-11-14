@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<%@ page import= "dynamicProject.*" %>
+<%@ page import= "java.util.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,13 +48,22 @@
 
 	<h2 class="text-center mt-4">Bienvenue administrateur : ${user}</h2>
 	
-	<h3 class="text-center mt-4">Modification d'article</h2>
+	<h3 class="text-center mt-4">Modification d'article</h3>
 		
 	<div class="col-5 mt-2 mx-auto">
 		<form action="CommerceServlet?flag=articleModifieEnvoi" method="POST">
 		
 			<div class="text-center">
-				<img src="data:image/jpg;base64,${image}" width="100" height="100"></img>
+				<%
+					Article article = (Article)request.getAttribute("article");
+					Iterator<String> itIms = article.getImages().values().iterator();
+					while(itIms.hasNext()){
+						String image = itIms.next();
+				%>
+					<img src="data:image/jpg;base64,<%= image %>" width="100" height="100"></img>
+				<%
+					}
+				%>
 			</div>			
 		
 			<div class="form-group d-none">
@@ -83,13 +94,18 @@
 				  </select>		      
 			</div>	
 			<div class="form-group">
-				<label for="newImageFile">Image</label>
-				<input class="form-control" type="file" id="newImageFile" name="newImageFile">			      
+				<label for="newImageFile1">Image 1</label>
+				<input class="form-control" type="file" id="newImageFile1" name="newImageFile1">			      
 			</div>
-			<div class="form-group d-none">
-				<label for="imageFile">Image</label>
-				<input class="form-control" type="text" id="imageFile" name="imageFile" value="${article.imageFile}">			      
+			<div class="form-group">
+				<label for="newImageFile2">Image 2</label>
+				<input class="form-control" type="file" id="newImageFile2" name="newImageFile2">			      
 			</div>
+			<div class="form-group">
+				<label for="newImageFile3">Image 3</label>
+				<input class="form-control" type="file" id="newImageFile3" name="newImageFile3">			      
+			</div>
+			
 			<br/>			    			   
 				
 		    <button type="submit" value="Valider" class="btn btn-primary mt-1">Valider</button>
