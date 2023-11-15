@@ -63,6 +63,32 @@ public class Connexion {
 		return mdp;
 	}
 	
+	public User getUser(String login) {
+		
+		Connection cnt = this.myCnx();
+		Statement st;
+		User user = null;
+		
+		try {
+			st = cnt.createStatement();
+			ResultSet rs = st.executeQuery("select u.lname, u.fname, u.adresse, u.tel, u.age, u.sexe from users u, compte c "
+					+ "where u.idCompte = c.idCompte "
+					+ "and c.login like '"+login+"'");
+			
+			if(rs.next()) {
+				user = new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5), rs.getString(6));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		this.cloturerConnexion();
+		
+		return user;
+	}
+	
 	public String getType(String login) {
 		
 		Connection cnt = this.myCnx();
@@ -454,6 +480,28 @@ public class Connexion {
 		this.cloturerConnexion();
 	}
 
+	public void updateUser(User user) {
+
+		Connection cnt = this.myCnx();		
+		PreparedStatement ps;
+		
+		try {			
+			
+			ps = cnt.prepareStatement("UPDATE users SET lname = '"+user.getLname()
+								+"', fname = '"+user.getFname()
+								+"', adresse = '"+user.getAdress()
+								+"', tel = '"+user.getTel()	
+								+"', age = '"+user.getAge()	
+								+"', sexe = '"+user.getSexe()	
+								+"' WHERE idUsers = "+user.getId());			
+			ps.execute();								
+						
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+		this.cloturerConnexion();
+		
+	}
 	
 	public static void main(String[] args) throws SQLException {
 		Connexion cn = new Connexion();
@@ -473,6 +521,10 @@ public class Connexion {
 		
 		cn.cloturerConnexion();
 	}
+
+	
+
+	
 
 	
 	

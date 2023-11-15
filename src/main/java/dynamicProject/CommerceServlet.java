@@ -46,6 +46,14 @@ public class CommerceServlet extends HttpServlet {
 			
 			request.getRequestDispatcher("/connexionAdmin.jsp").forward(request, response);
 			
+		} else if(request.getParameter("flag").equals("allerAModifUser")) {
+			
+			request.getRequestDispatcher("/UpdateUser.jsp").forward(request, response);
+			
+		} else if(request.getParameter("flag").equals("retourUser")) {
+			
+			request.getRequestDispatcher("/connexionUser.jsp").forward(request, response);
+			
 		} else {
 			response.getWriter().append("Served at: ").append(request.getContextPath());
 		}
@@ -137,9 +145,32 @@ public class CommerceServlet extends HttpServlet {
 			
 			this.doSupprimerImage(request, response);
 			
+		} else if (request.getParameter("flag").equals("modifUser")){
+			
+			this.doModifierUser(request, response);
+			
 		} else {
 			this.doGet(request, response);
 		}
+	}
+
+	private void doModifierUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		String lname = request.getParameter("nom");
+		String fname = request.getParameter("prenom");
+		String adresse = request.getParameter("adresse");
+		String tel = request.getParameter("tel");
+		int age = Integer.parseInt(request.getParameter("age"));
+		String sexe = request.getParameter("sex");
+		
+		User user = new User(lname, fname, adresse, tel, age, sexe);
+		
+		co.updateUser(user);
+		
+		request.getSession().setAttribute("user", user);
+		
+		request.getRequestDispatcher("/connexionUser.jsp").forward(request, response);
+		
 	}
 
 	private void doSupprimerImage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -432,6 +463,9 @@ public class CommerceServlet extends HttpServlet {
 					
 					request.getRequestDispatcher("/connexionAdmin.jsp").forward(request, response);
 				}else {
+					
+					request.getSession().setAttribute("user", co.getUser(login));
+					
 					request.getRequestDispatcher("/connexionUser.jsp").forward(request, response);
 				}
 				
