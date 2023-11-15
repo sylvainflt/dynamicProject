@@ -37,7 +37,7 @@
 		  
 		  	<form action="CommerceServlet?flag=selectCategorie" method="post">
 		  		<div class="form-group">
-			      <label for="listeCatSelect" class="form-label mt-1">Catégorie : </label>
+			      <label for="listeCatSelect" class="form-label mt-2">Catégorie : </label>
 			      <select class="" id="listeCatSelect" name="listeCatSelect">		
 			      	<option class="text-info" value="0">Toutes</option>
 			      	<c:forEach items="${categories}" var="categorie">
@@ -45,8 +45,7 @@
 				    </c:forEach>
 				  </select>  
 				  <button type="submit" value="Filtrer" class="btn btn-primary m-0 p-0">Filtrer</button>
-			    </div>
-			    
+			    </div>			    
 		  	</form>
 		  
 		  	<form action="CommerceServlet?flag=suppressionArticles" method="post">
@@ -143,7 +142,7 @@
 				</div>
 			    <br/>			    			   
 			
-			    <button type="submit" value="Valider" class="btn btn-primary mt-1">Valider</button>
+			    <button type="submit" value="Valider" id="ajoutArticleButton" class="btn btn-primary mt-1">Valider</button>
 			    <button type="reset" value="Annuler" class="btn btn-secondary mt-1">Annuler</button>
 				
 			  </fieldset>
@@ -193,6 +192,7 @@
 		  </div>	  
 		</div>
 		<p class="mt-4">${ resultat }</p>
+		<p class="mt-2">${ !empty erreurs ? erreurs : "" }</p>
 	</div>	
 	
 	<div class="modal" id="modalUpdateArticle">

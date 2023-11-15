@@ -31,3 +31,10 @@ function validationSupCat(event){
 		
 	}
 }
+
+ajoutArticleButton.addEventListener("click", function(event){
+	if(imageFile1.value == "" && imageFile2.value == "" && imageFile3.value == ""){
+		event.preventDefault()
+		alert("Veuillez ajouter au moins une image.")
+	}
+})

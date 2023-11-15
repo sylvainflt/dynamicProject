@@ -17,14 +17,14 @@ public class Connexion {
 	private Connection cn = null;
 	
 	//private static final String imagesPath = "C:/Users/59013-15-09/Downloads/";
-	private static final String imagesPath = "/home/sylvain/Images/";
+	private static final String imagesPath = "C:/Users/59013-15-09/Downloads/";
 	
 	public Connection myCnx() {
 		
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-			cn = DriverManager.getConnection("jdbc:mariadb://localhost/projetCommerce", "root", "");
-			System.out.println("connexion réussie");
+			cn = DriverManager.getConnection("jdbc:mariadb://localhost/commerce", "root", "");
+			//System.out.println("connexion réussie");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -52,10 +52,13 @@ public class Connexion {
 			if(rs.next()) {
 				mdp = rs.getString(1);
 			}
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		this.cloturerConnexion();
 		
 		return mdp;
 	}
@@ -77,6 +80,8 @@ public class Connexion {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		this.cloturerConnexion();
 		
 		return type;
 	}
@@ -110,7 +115,7 @@ public class Connexion {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}				
-		
+		this.cloturerConnexion();
 	}
 	
 	public void ajouterCategorie(Categorie cat) {
@@ -127,7 +132,7 @@ public class Connexion {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}	
-		
+		this.cloturerConnexion();
 	}
 	
 	public void ajouterArticle(Article a) {
@@ -162,7 +167,7 @@ public class Connexion {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}	
-		
+		this.cloturerConnexion();
 	}
 	
 	public void modifierArticle(Article a) {
@@ -203,7 +208,7 @@ public class Connexion {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}	
-		
+		this.cloturerConnexion();
 	}
 	
 	public List<Categorie> getCategories(){
@@ -225,6 +230,9 @@ public class Connexion {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		this.cloturerConnexion();
+		
 		return categories;		
 		
 	}
@@ -239,7 +247,8 @@ public class Connexion {
 			st = cnt.createStatement();
 			ResultSet rs = st.executeQuery("select a.idArticle, a.designation, a.pu, a.qty, a.idCategorie, c.designation "
 					+ "from article a, categorie c "
-					+ "where a.idCategorie = c.idCategorie");
+					+ "where a.idCategorie = c.idCategorie "
+					+ "order by a.idArticle");
 			
 			Article article = null;
 					
@@ -269,7 +278,6 @@ public class Connexion {
 			            }
 					}
 	            }
-				
 				listeArticles.add(article);
 			}
 			
@@ -277,6 +285,8 @@ public class Connexion {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		this.cloturerConnexion();
 		return listeArticles;	
 	}
 	
@@ -330,6 +340,8 @@ public class Connexion {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		this.cloturerConnexion();
 		return listeArticles;	
 		
 	}
@@ -357,6 +369,8 @@ public class Connexion {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		this.cloturerConnexion();
 		return a;	
 		
 	}
@@ -382,6 +396,8 @@ public class Connexion {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		this.cloturerConnexion();
 		return listeImages;	
 		
 	}
@@ -402,7 +418,7 @@ public class Connexion {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}	
-		
+		this.cloturerConnexion();
 	}
 
 	public void supprimerCategorie(String id) {
@@ -418,7 +434,24 @@ public class Connexion {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}	
+		this.cloturerConnexion();
+	}
+
+	public void supprimerImage(String imageCheck) {
+
+		Connection cnt = this.myCnx();		
+		PreparedStatement ps;
 		
+		try {
+			
+			ps = cnt.prepareStatement("DELETE FROM image WHERE name like '"+imageCheck+"'");
+			ps.execute();							
+					
+			cnt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+		this.cloturerConnexion();
 	}
 
 	
@@ -441,6 +474,7 @@ public class Connexion {
 		cn.cloturerConnexion();
 	}
 
+	
 	
 	
 	

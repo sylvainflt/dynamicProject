@@ -133,9 +133,30 @@ public class CommerceServlet extends HttpServlet {
 			
 			this.doSelectCategories(request, response);
 			
+		} else if (request.getParameter("flag").equals("supprimerImage")){
+			
+			this.doSupprimerImage(request, response);
+			
 		} else {
 			this.doGet(request, response);
 		}
+	}
+
+	private void doSupprimerImage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		String[] imagesChecks = request.getParameterValues("imagesChecks");
+		
+		if(imagesChecks != null && imagesChecks.length > 0) {
+			for ( String imageCheck : imagesChecks ) {
+				co.supprimerImage(imageCheck);
+			}
+		}
+		
+		List<Article> listeArticles = co.getListeArticles();
+	    
+	    request.getSession().setAttribute("listeArticles", listeArticles);
+		
+		request.getRequestDispatcher("/connexionAdmin.jsp").forward(request, response);
 	}
 
 	private void doSelectCategories(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -255,6 +276,7 @@ public class CommerceServlet extends HttpServlet {
 		
 		try {
 			validationDesignationArticle(designation);
+			validationPhotoPresente(imageFile1, imageFile2, imageFile3);
 		} catch (Exception e) {
 			erreurs.put(designation, e.getMessage());
 		}
@@ -283,9 +305,19 @@ public class CommerceServlet extends HttpServlet {
 		
 	}
 
+	private void validationPhotoPresente(String imageFile1, String imageFile2, String imageFile3) throws Exception {
+
+		if((imageFile1 == null || imageFile1 == "")
+				&& (imageFile2 == null || imageFile2 == "") 
+				&& (imageFile3 == null || imageFile3 == "")) {
+			throw new Exception("Veuillez ajouter au moins une image.");
+		}
+		
+	}
+
 	private void validationDesignationArticle(String designation) throws Exception {
 		if(designation != null && designation.trim().length() < 3) {
-			throw new Exception("Le champ doit être d'au moins 3 caractères");
+			throw new Exception("Le champ doit être d'au moins 3 caractères.");
 		}
 	}
 
