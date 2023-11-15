@@ -17,13 +17,13 @@ public class Connexion {
 	private Connection cn = null;
 	
 	//private static final String imagesPath = "C:/Users/59013-15-09/Downloads/";
-	private static final String imagesPath = "C:/Users/59013-15-09/Downloads/";
+	private static final String imagesPath = "/home/sylvain/Images/";
 	
 	public Connection myCnx() {
 		
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-			cn = DriverManager.getConnection("jdbc:mariadb://localhost/commerce", "root", "");
+			cn = DriverManager.getConnection("jdbc:mariadb://localhost/projetCommerce", "root", "");
 			//System.out.println("connexion réussie");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -71,12 +71,14 @@ public class Connexion {
 		
 		try {
 			st = cnt.createStatement();
-			ResultSet rs = st.executeQuery("select u.lname, u.fname, u.adresse, u.tel, u.age, u.sexe from users u, compte c "
+			ResultSet rs = st.executeQuery("select u.idUsers, u.lname, u.fname, u.adresse, u.tel, u.age, u.sexe "
+					+ "from users u, compte c "
 					+ "where u.idCompte = c.idCompte "
 					+ "and c.login like '"+login+"'");
 			
 			if(rs.next()) {
-				user = new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5), rs.getString(6));
+				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), 
+						rs.getString(5), rs.getInt(6), rs.getString(7));
 			}
 			
 		} catch (SQLException e) {
@@ -87,6 +89,32 @@ public class Connexion {
 		this.cloturerConnexion();
 		
 		return user;
+	}
+	
+	public Compte getCompte(String login) {
+		
+		Connection cnt = this.myCnx();
+		Statement st;
+		Compte compte = null;
+		
+		try {
+			st = cnt.createStatement();
+			ResultSet rs = st.executeQuery("select c.idCompte, c.login, c.pwd, c.type "
+					+ "from compte c "
+					+ "where c.login like '"+login+"'");
+			
+			if(rs.next()) {
+				compte = new Compte(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		this.cloturerConnexion();
+		
+		return compte;
 	}
 	
 	public String getType(String login) {
@@ -486,7 +514,7 @@ public class Connexion {
 		PreparedStatement ps;
 		
 		try {			
-			
+			System.out.println("user.getId() "+user.getId());
 			ps = cnt.prepareStatement("UPDATE users SET lname = '"+user.getLname()
 								+"', fname = '"+user.getFname()
 								+"', adresse = '"+user.getAdress()

@@ -14,12 +14,7 @@
 		seConnecter="Connexion.jsp" 
 		sEnregistrer="Inscription.jsp"/>
 
-	<% 
-		String userName = request.getParameter("user");
-		if(userName == null) userName = "";
-		
-	%>
-		<h2 class="text-center mt-4">Bienvenue utilisateur : <%= userName %></h2>
+		<h2 class="text-center mt-4">Bienvenue utilisateur : ${user.fname}</h2>
 		
 		<div class="col-5 mt-4 mx-auto">
 			<form action="CommerceServlet?flag=modifUser" method="POST">

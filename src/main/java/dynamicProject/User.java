@@ -20,6 +20,17 @@ public class User {
 		this.age = age;
 		this.sexe = sexe;
 	}
+	
+	public User(int id, String lname, String fname, String adress, String tel, Integer age, String sexe) {
+		super();
+		this.id = id;
+		this.lname = lname;
+		this.fname = fname;
+		this.adress = adress;
+		this.tel = tel;
+		this.age = age;
+		this.sexe = sexe;
+	}
 
 	public int getId() {
 		return id;

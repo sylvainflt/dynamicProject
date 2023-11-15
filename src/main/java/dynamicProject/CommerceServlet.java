@@ -163,7 +163,8 @@ public class CommerceServlet extends HttpServlet {
 		int age = Integer.parseInt(request.getParameter("age"));
 		String sexe = request.getParameter("sex");
 		
-		User user = new User(lname, fname, adresse, tel, age, sexe);
+		int id = ((User)request.getSession().getAttribute("user")).getId();
+		User user = new User( id, lname, fname, adresse, tel, age, sexe);
 		
 		co.updateUser(user);
 		
@@ -465,6 +466,7 @@ public class CommerceServlet extends HttpServlet {
 				}else {
 					
 					request.getSession().setAttribute("user", co.getUser(login));
+					request.getSession().setAttribute("compte", co.getCompte(login));
 					
 					request.getRequestDispatcher("/connexionUser.jsp").forward(request, response);
 				}

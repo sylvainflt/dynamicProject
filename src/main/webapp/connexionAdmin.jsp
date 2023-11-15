@@ -38,7 +38,7 @@
 		  	<form action="CommerceServlet?flag=selectCategorie" method="post">
 		  		<div class="form-group">
 			      <label for="listeCatSelect" class="form-label mt-2">Catégorie : </label>
-			      <select class="" id="listeCatSelect" name="listeCatSelect">		
+			      <select class="rounded" id="listeCatSelect" name="listeCatSelect">		
 			      	<option class="text-info" value="0">Toutes</option>
 			      	<c:forEach items="${categories}" var="categorie">
 				        <option class="text-info" value="${categorie.id}">${categorie.designation}</option>

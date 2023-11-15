@@ -13,6 +13,14 @@ public class Compte {
 		this.password = password;
 		this.type = type;
 	}
+	
+	public Compte(int id, String login, String password, String type) {
+		super();
+		this.id = id;
+		this.login = login;
+		this.password = password;
+		this.type = type;
+	}
 
 	public String getLogin() {
 		return login;
@@ -24,6 +32,10 @@ public class Compte {
 
 	public String getType() {
 		return type;
+	}
+
+	public int getId() {
+		return id;
 	}
 	
 	
