@@ -12,18 +12,25 @@ import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
 public class Connexion {
 
 	private Connection cn = null;
 	
-	//private static final String imagesPath = "C:/Users/59013-15-09/Downloads/";
-	private static final String imagesPath = "/home/sylvain/Images/";
+	private static final String imagesPath = "C:/Users/59013-15-09/Downloads/";
+	//private static final String imagesPath = "/home/sylvain/Images/";
 	
 	public Connection myCnx() {
 		
 		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-			cn = DriverManager.getConnection("jdbc:mariadb://localhost/projetCommerce", "root", "");
+			//Class.forName("org.mariadb.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			//cn = DriverManager.getConnection("jdbc:mariadb://localhost/commerce", "root", "");
+			cn = DriverManager.getConnection("jdbc:mysql://localhost/commerce", "root", "");
 			//System.out.println("connexion réussie");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -222,6 +229,19 @@ public class Connexion {
 			e.printStackTrace();
 		}	
 		this.cloturerConnexion();
+	}
+	
+	public void ajouterArticleHibernate(Article1 a) {
+
+		Configuration configuration = new Configuration().configure();
+		SessionFactory sf = configuration.buildSessionFactory();
+		Session session = sf.openSession();
+		Transaction tr = session.beginTransaction();
+		session.persist(a);
+		tr.commit();
+		session.close();
+		sf.close();
+		
 	}
 	
 	public void modifierArticle(Article a) {
@@ -549,6 +569,8 @@ public class Connexion {
 		
 		cn.cloturerConnexion();
 	}
+
+	
 
 	
 

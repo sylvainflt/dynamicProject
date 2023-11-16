@@ -149,6 +149,10 @@ public class CommerceServlet extends HttpServlet {
 			
 			this.doModifierUser(request, response);
 			
+		} else if (request.getParameter("flag").equals("ajoutArticleHibernate")){
+			
+			this.doAjoutArticleHibernate(request, response);
+			
 		} else {
 			this.doGet(request, response);
 		}
@@ -337,6 +341,53 @@ public class CommerceServlet extends HttpServlet {
 		
 	}
 
+	private void doAjoutArticleHibernate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		String resultat;
+		Map<String,String> erreurs = new HashMap<String,String>();
+				
+		String designation = request.getParameter("designation");
+		float prixUnitaire = Float.parseFloat(request.getParameter("prixUnitaire"));
+		int quantite = Integer.parseInt(request.getParameter("quantite"));
+		int categorie = Integer.parseInt(request.getParameter("categorie"));
+		
+		String imageFile1 = request.getParameter("imageFile1");
+		String imageFile2 = request.getParameter("imageFile2");
+		String imageFile3 = request.getParameter("imageFile3");
+		
+		try {
+			validationDesignationArticle(designation);
+			validationPhotoPresente(imageFile1, imageFile2, imageFile3);
+		} catch (Exception e) {
+			erreurs.put(designation, e.getMessage());
+		}
+		
+		if(erreurs.isEmpty()) {
+			resultat = "Article ajoutée.";			
+			Article1 a = new Article1(designation, prixUnitaire, quantite, categorie);
+			
+			/*
+			 * if(imageFile1 != null && imageFile1 != "") a.getImages().put(imageFile1, "");
+			 * if(imageFile2 != null && imageFile2 != "") a.getImages().put(imageFile2, "");
+			 * if(imageFile3 != null && imageFile3 != "") a.getImages().put(imageFile3, "");
+			 */
+			
+			co.ajouterArticleHibernate(a);
+			
+		}else {
+			resultat = "Échec de l'ajout";
+		}
+		
+		request.setAttribute("erreurs", erreurs);
+		request.setAttribute("resultat", resultat);
+		
+		List<Article> listeArticles = co.getListeArticles();
+	    request.getSession().setAttribute("listeArticles", listeArticles);
+		
+		request.getRequestDispatcher("/connexionAdmin1.jsp").forward(request, response);
+		
+	}
+	
 	private void validationPhotoPresente(String imageFile1, String imageFile2, String imageFile3) throws Exception {
 
 		if((imageFile1 == null || imageFile1 == "")
