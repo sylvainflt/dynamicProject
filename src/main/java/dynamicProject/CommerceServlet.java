@@ -509,10 +509,12 @@ public class CommerceServlet extends HttpServlet {
 					List<Categorie> categories = co.getCategories();
 				    request.getSession().setAttribute("categories", categories);
 				    
-				    List<Article> listeArticles = co.getListeArticles();
-				    
+				    List<Article> listeArticles = co.getListeArticles();				    
 				    request.getSession().setAttribute("listeArticles", listeArticles);
 					
+				    List<Commande> listeCommandes = co.getListeCommandes();				    
+				    request.getSession().setAttribute("commandes", listeCommandes);
+				    
 					request.getRequestDispatcher("/connexionAdmin.jsp").forward(request, response);
 				}else {
 					

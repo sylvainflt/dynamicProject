@@ -20,9 +20,13 @@ import org.hibernate.cfg.Configuration;
 public class Connexion {
 
 	private Connection cn = null;
+	private Configuration configuration = new Configuration().configure();
+	private SessionFactory sf = configuration.buildSessionFactory();
+	private Session session = sf.openSession();
+	private Transaction tr = session.beginTransaction();
 	
-	private static final String imagesPath = "C:/Users/59013-15-09/Downloads/";
-	//private static final String imagesPath = "/home/sylvain/Images/";
+	//private static final String imagesPath = "C:/Users/59013-15-09/Downloads/";
+	private static final String imagesPath = "/home/sylvain/Images/";
 	
 	public Connection myCnx() {
 		
@@ -30,7 +34,7 @@ public class Connexion {
 			//Class.forName("org.mariadb.jdbc.Driver");
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			//cn = DriverManager.getConnection("jdbc:mariadb://localhost/commerce", "root", "");
-			cn = DriverManager.getConnection("jdbc:mysql://localhost/commerce", "root", "");
+			cn = DriverManager.getConnection("jdbc:mysql://localhost/projetCommerce", "root", "");
 			//System.out.println("connexion réussie");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -233,10 +237,7 @@ public class Connexion {
 	
 	public void ajouterArticleHibernate(Article1 a) {
 
-		Configuration configuration = new Configuration().configure();
-		SessionFactory sf = configuration.buildSessionFactory();
-		Session session = sf.openSession();
-		Transaction tr = session.beginTransaction();
+		
 		session.persist(a);
 		tr.commit();
 		session.close();
@@ -568,6 +569,34 @@ public class Connexion {
 		System.out.println("vous etes loggé");
 		
 		cn.cloturerConnexion();
+	}
+
+	public List<Commande> getListeCommandes() {
+		Connection cnt = this.myCnx();
+		Statement st;
+		List<Commande> listeCommandes = new ArrayList<Commande>();
+		
+		try {
+			
+			st = cnt.createStatement();
+			ResultSet rs = st.executeQuery("select c.idCommande, c.dateCommande, c.idUsers "
+					+ "from commande c");
+			
+			Commande commande = null;
+					
+			while(rs.next()) {
+				
+				commande = new Commande(rs.getInt(1), rs.getString(2), rs.getInt(3));												
+				listeCommandes.add(commande);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		this.cloturerConnexion();
+		return listeCommandes;
 	}
 
 	

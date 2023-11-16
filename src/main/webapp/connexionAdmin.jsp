@@ -31,6 +31,9 @@
 		  <li class="nav-item" role="presentation">
 		    <a class="nav-link" data-bs-toggle="tab" href="#categorie" aria-selected="false" role="tab">Categorie</a>
 		  </li>
+		  <li class="nav-item" role="presentation">
+		    <a class="nav-link" data-bs-toggle="tab" href="#commandes" aria-selected="false" role="tab">Commandes</a>
+		  </li>
 		</ul>
 		<div id="myTabContent" class="tab-content">
 		  <div class="tab-pane fade active show" id="listeArticles" role="tabpanel">
@@ -189,6 +192,33 @@
 			  </fieldset>
 			</form>
 			
+		  </div>
+		  <div class="tab-pane fade active" id="commandes" role="tabpanel">
+		  
+		  	<form action="CommerceServlet?flag=suppressionCommandes" method="post">
+			  	<table class="table table-hover mt-2">
+				  <thead>
+				    <tr>
+				      <th scope="col">Date</th>
+				      <th scope="col">Numéro</th>
+				      <th scope="col">Utilisateur</th>				
+				      <th scope="col" class="text-center"><button type="submit" class="btn btn-outline-primary p-0" id="suppButton">Supprimer</button></th>
+				    </tr>
+				  </thead>
+				  <tbody>	
+				  	<c:forEach items="${commandes}" var="commande">				  					  		    
+					    <tr>					      
+					      <td>${ commande.dateCommande }</td>
+					      <td>${ commande.idCommande }</td>
+					      <td>${ commande.idUsers }</td>
+					      <td class="text-center">
+					      	<input class="form-check-input" type="checkbox" name="articlesIds" value="${ commande.idCommande }"/>
+					      </td>
+					    </tr>	
+				    </c:forEach>				      			  
+				  </tbody>
+				</table>
+			</form>	
 		  </div>	  
 		</div>
 		<p class="mt-4">${ resultat }</p>
