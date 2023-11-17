@@ -209,7 +209,11 @@
 				  	<c:forEach items="${commandes}" var="commande">				  					  		    
 					    <tr>					      
 					      <td>${ commande.dateCommande }</td>
-					      <td>${ commande.idCommande }</td>
+					      <td>
+					      	<a href="CommerceServlet?flag=allerCommande&id=${ commande.idCommande }" id="article${ commande.idCommande }">
+					      		${ commande.idCommande }
+					      	</a>
+					      </td>
 					      <td>${ commande.idUsers }</td>
 					      <td class="text-center">
 					      	<input class="form-check-input" type="checkbox" name="articlesIds" value="${ commande.idCommande }"/>

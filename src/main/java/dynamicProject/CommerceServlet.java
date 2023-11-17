@@ -54,9 +54,26 @@ public class CommerceServlet extends HttpServlet {
 			
 			request.getRequestDispatcher("/connexionUser.jsp").forward(request, response);
 			
+		} else if(request.getParameter("flag").equals("allerCommande")) {
+			
+			this.doAllerCommande(request, response);
+			
 		} else {
 			response.getWriter().append("Served at: ").append(request.getContextPath());
 		}
+	}
+
+	private void doAllerCommande(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		int id = Integer.parseInt(request.getParameter("id"));
+		System.out.println(id);
+		
+		List<LigneCommande> lignesCommande = co.getLignesCommande(id);
+						
+		request.getSession().setAttribute("lignesCommande", lignesCommande);
+		
+		request.getRequestDispatcher("/Commande.jsp").forward(request, response);
+		
 	}
 
 	private void doModifierArticle(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -65,9 +82,7 @@ public class CommerceServlet extends HttpServlet {
 		System.out.println(id);
 		
 		Article a = co.getArticle(id);
-		
-		
-		
+						
 		try {
 			
 			List<Image> listeImages = co.getImages(id);

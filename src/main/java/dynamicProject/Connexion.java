@@ -599,6 +599,37 @@ public class Connexion {
 		return listeCommandes;
 	}
 
+	public List<LigneCommande> getLignesCommande(int id) {
+		
+		Connection cnt = this.myCnx();
+		Statement st;
+		List<LigneCommande> lignesCommande = new ArrayList<LigneCommande>();
+		
+		try {
+			
+			st = cnt.createStatement();
+			ResultSet rs = st.executeQuery("select lc.idLigneCommande, lc.idArticle, lc.qtyCommandee "
+					+ "from ligneCommande lc "
+					+ "where lc.idCommande = "+id);
+			
+			LigneCommande ligneCommande = null;
+					
+			while(rs.next()) {
+				
+				ligneCommande = new LigneCommande(rs.getInt(1), rs.getString(2), rs.getInt(3));												
+				lignesCommande.add(ligneCommande);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		this.cloturerConnexion();
+		return lignesCommande;
+		
+	}
+
 	
 
 	
