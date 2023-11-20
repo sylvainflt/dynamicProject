@@ -33,22 +33,37 @@
 				  <tbody>	
 				  	<c:forEach items="${lignesCommande}" var="ligneCommande">				  					  		    
 					    <tr>					      
-					      <td>${ ligneCommande.id }</td>
-					      <td>${ ligneCommande.article }</td>
-					      <td>${ ligneCommande.quantite }</td>
+					      <td>
+					      	<a href="CommerceServlet?flag=allerLigneCommande&id=${ ligneCommande.idLigneCommande }" id="ligneCommande${ ligneCommande.idLigneCommande }">
+					      		${ ligneCommande.idLigneCommande }
+					      	</a>
+					      </td>
+					      <td>
+					      	<a href="#" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="">
+					      		${ ligneCommande.idArticle }
+					      	</a>
+					      </td>
+					      <td>${ ligneCommande.qtyCommandee }</td>
 					      <td class="text-center">
-					      	<input class="form-check-input" type="checkbox" name="lignesCommandeIds" value="${ ligneCommande.id }"/>
+					      	<input class="form-check-input" type="checkbox" name="lignesCommandeIds" value="${ ligneCommande.idLigneCommande }"/>
 					      </td>
 					    </tr>	
 				    </c:forEach>				      			  
 				  </tbody>
 				</table>
 			</form>	
+			<a href="CommerceServlet?flag=retourlisteCommandes">
+		    	<button type="button" value="Retour" class="btn btn-secondary mt-1">Retour</button>
+		    </a>
 		</div>
 		
 		
 		
 		
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+	<script>		
+		const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+		const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+	</script>
 </body>
 </html>

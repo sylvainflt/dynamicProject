@@ -30,7 +30,7 @@
 			    </div>
 			    <div class="form-group">
 			      <label for="adresse" class="form-label mt-1">Adresse</label>
-			      <input type="text" class="form-control" id="adresse" name="adresse" value="${user.adress}" required>		      
+			      <input type="text" class="form-control" id="adresse" name="adresse" value="${user.adresse}" required>		      
 			    </div>		   
 			    <div class="form-group">
 			      <label for="tel" class="form-label mt-2">Tél</label>

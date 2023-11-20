@@ -12,6 +12,7 @@ import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -22,11 +23,11 @@ public class Connexion {
 	private Connection cn = null;
 	private Configuration configuration = new Configuration().configure();
 	private SessionFactory sf = configuration.buildSessionFactory();
-	private Session session = sf.openSession();
-	private Transaction tr = session.beginTransaction();
+	private Session session;
+	private Transaction tr;
 	
-	//private static final String imagesPath = "C:/Users/59013-15-09/Downloads/";
-	private static final String imagesPath = "/home/sylvain/Images/";
+	private static final String imagesPath = "C:/Users/59013-15-09/Downloads/";
+	//private static final String imagesPath = "/home/sylvain/Images/";
 	
 	public Connection myCnx() {
 		
@@ -34,7 +35,7 @@ public class Connexion {
 			//Class.forName("org.mariadb.jdbc.Driver");
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			//cn = DriverManager.getConnection("jdbc:mariadb://localhost/commerce", "root", "");
-			cn = DriverManager.getConnection("jdbc:mysql://localhost/projetCommerce", "root", "");
+			cn = DriverManager.getConnection("jdbc:mysql://localhost/commerce", "root", "");
 			//System.out.println("connexion réussie");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -74,11 +75,11 @@ public class Connexion {
 		return mdp;
 	}
 	
-	public User getUser(String login) {
+	public Users getUser(String login) {
 		
 		Connection cnt = this.myCnx();
 		Statement st;
-		User user = null;
+		Users user = null;
 		
 		try {
 			st = cnt.createStatement();
@@ -88,7 +89,7 @@ public class Connexion {
 					+ "and c.login like '"+login+"'");
 			
 			if(rs.next()) {
-				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), 
+				user = new Users(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), 
 						rs.getString(5), rs.getInt(6), rs.getString(7));
 			}
 			
@@ -151,7 +152,7 @@ public class Connexion {
 		return type;
 	}
 	
-	public void inscrire(User user, Compte compte) {
+	public void inscrire(Users user, Compte compte) {
 		
 		Connection cnt = this.myCnx();
 		
@@ -172,7 +173,7 @@ public class Connexion {
 			}
 			
 			ps = cnt.prepareStatement("INSERT INTO users (fname, lname, adresse, tel, age, sexe, idCompte) \n"
-					+ "VALUES('"+user.getFname()+"','"+user.getLname()+"','"+user.getAdress()+"','"+user.getTel()+"','"+user.getAge()+"','"
+					+ "VALUES('"+user.getFname()+"','"+user.getLname()+"','"+user.getAdresse()+"','"+user.getTel()+"','"+user.getAge()+"','"
 							+user.getSexe()+"','"+idCompte+"')");
 			ps.execute();
 			
@@ -237,9 +238,13 @@ public class Connexion {
 	
 	public void ajouterArticleHibernate(Article1 a) {
 
+		sf = configuration.buildSessionFactory();
+		session = sf.openSession();
+		tr = session.beginTransaction();
 		
 		session.persist(a);
 		tr.commit();
+		
 		session.close();
 		sf.close();
 		
@@ -529,20 +534,20 @@ public class Connexion {
 		this.cloturerConnexion();
 	}
 
-	public void updateUser(User user) {
+	public void updateUser(Users user) {
 
 		Connection cnt = this.myCnx();		
 		PreparedStatement ps;
 		
 		try {			
-			System.out.println("user.getId() "+user.getId());
+			System.out.println("user.getId() "+user.getIdUsers());
 			ps = cnt.prepareStatement("UPDATE users SET lname = '"+user.getLname()
 								+"', fname = '"+user.getFname()
-								+"', adresse = '"+user.getAdress()
+								+"', adresse = '"+user.getAdresse()
 								+"', tel = '"+user.getTel()	
 								+"', age = '"+user.getAge()	
 								+"', sexe = '"+user.getSexe()	
-								+"' WHERE idUsers = "+user.getId());			
+								+"' WHERE idUsers = "+user.getIdUsers());			
 			ps.execute();								
 						
 		} catch (SQLException e) {
@@ -579,14 +584,15 @@ public class Connexion {
 		try {
 			
 			st = cnt.createStatement();
-			ResultSet rs = st.executeQuery("select c.idCommande, c.dateCommande, c.idUsers "
-					+ "from commande c");
+			ResultSet rs = st.executeQuery("select c.idCommande, c.dateCommande, c.idUsers, u.lname "
+					+ "from commande c, users u "
+					+ "where c.idUsers = u.idUsers");
 			
 			Commande commande = null;
 					
 			while(rs.next()) {
 				
-				commande = new Commande(rs.getInt(1), rs.getString(2), rs.getInt(3));												
+				commande = new Commande(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getString(4));												
 				listeCommandes.add(commande);
 			}
 			
@@ -608,7 +614,7 @@ public class Connexion {
 		try {
 			
 			st = cnt.createStatement();
-			ResultSet rs = st.executeQuery("select lc.idLigneCommande, lc.idArticle, lc.qtyCommandee "
+			ResultSet rs = st.executeQuery("select lc.idLigneCommande, lc.idCommande, lc.idArticle, lc.qtyCommandee "
 					+ "from ligneCommande lc "
 					+ "where lc.idCommande = "+id);
 			
@@ -616,7 +622,7 @@ public class Connexion {
 					
 			while(rs.next()) {
 				
-				ligneCommande = new LigneCommande(rs.getInt(1), rs.getString(2), rs.getInt(3));												
+				ligneCommande = new LigneCommande(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4));												
 				lignesCommande.add(ligneCommande);
 			}
 			
@@ -627,6 +633,50 @@ public class Connexion {
 		
 		this.cloturerConnexion();
 		return lignesCommande;
+		
+	}
+
+	public LigneCommande getLigneCommande(int id) {
+		
+		session = sf.openSession();
+		tr = session.beginTransaction();
+		
+		LigneCommande lc = session.get(LigneCommande.class, id);		
+		
+		tr.commit();
+		session.close();
+		
+		return lc;
+		
+	}
+
+	public void saveLigneCommande(int idLigneCommande, int quantite) {
+
+		
+		session = sf.openSession();
+		tr = session.beginTransaction();
+		
+		LigneCommande lc = session.get(LigneCommande.class, idLigneCommande);
+		lc.setQtyCommandee(quantite);
+		session.persist(lc);
+		
+		tr.commit();
+		session.close();
+		
+	}
+
+	public List<Users> getListeUsers() {
+		
+		session = sf.openSession();
+		tr = session.beginTransaction();
+		
+		Criteria criteria = session.createCriteria(Users.class);
+		List<Users> lu = (List<Users>) criteria.list();		
+		
+		tr.commit();
+		session.close();
+		
+		return lu;
 		
 	}
 

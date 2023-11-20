@@ -32,7 +32,7 @@
 				  	<div>
 				  		<p>${user.lname}</p>		      
 						<p>${user.fname}</p>		      
-						<p>${user.adress}</p>	      
+						<p>${user.adresse}</p>	      
 						<p>${user.tel}</p>
 						<p>${user.age} ans</p>     
 						<p>${user.sexe}</p>

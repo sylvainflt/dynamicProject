@@ -34,6 +34,9 @@
 		  <li class="nav-item" role="presentation">
 		    <a class="nav-link" data-bs-toggle="tab" href="#commandes" aria-selected="false" role="tab">Commandes</a>
 		  </li>
+		  <li class="nav-item" role="presentation">
+		    <a class="nav-link" data-bs-toggle="tab" href="#utilisateurs" aria-selected="false" role="tab">Utilisateurs</a>
+		  </li>
 		</ul>
 		<div id="myTabContent" class="tab-content">
 		  <div class="tab-pane fade active show" id="listeArticles" role="tabpanel">
@@ -214,7 +217,7 @@
 					      		${ commande.idCommande }
 					      	</a>
 					      </td>
-					      <td>${ commande.idUsers }</td>
+					      <td><a href="#" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="${ commande.user }">${ commande.idUsers }</a></td>
 					      <td class="text-center">
 					      	<input class="form-check-input" type="checkbox" name="articlesIds" value="${ commande.idCommande }"/>
 					      </td>
@@ -223,8 +226,43 @@
 				  </tbody>
 				</table>
 			</form>	
-		  </div>	  
+		  </div>
+		 
+		 <div class="tab-pane fade" id="utilisateurs" role="tabpanel">
+		    
+		    <form action="CommerceServlet?flag=suppressionUsers" method="post">
+			    <table class="table table-hover mt-2">
+				  <thead>
+				    <tr>
+				      <th scope="col">Nom</th>
+				      <th scope="col">Prénom</th>
+				      <th scope="col">Adresse</th>
+				      <th scope="col">Tél</th>
+				      <th scope="col">Age</th>
+				      <th scope="col">Sexe</th>
+				      <th scope="col" class="text-center"><button type="submit" class="btn btn-outline-primary p-0" id="suppCatButton">Supprimer</button></th>
+				    </tr>
+				  </thead>
+				  <tbody>	
+				  	<c:forEach items="${users}" var="user">		    
+					    <tr>
+					      <td>${user.lname}</td>	
+					      <td>${user.fname}</td>
+					      <td>${user.adresse}</td>
+					      <td>${user.tel}</td>
+					      <td>${user.age}</td>
+					      <td>${user.sexe}</td>			     
+					      <td class="text-center">
+					      	<input class="form-check-input" type="checkbox" name="usersIds" value="${user.idUsers}"/>
+					      </td>
+					    </tr>	
+				    </c:forEach>		   			   
+				  </tbody>
+				</table>
+			</form>	
+		  </div>  
 		</div>
+		
 		<p class="mt-4">${ resultat }</p>
 		<p class="mt-2">${ !empty erreurs ? erreurs : "" }</p>
 	</div>	
@@ -263,7 +301,8 @@
 	    </div>
 	  </div>	  
 	</div>
-	
+		
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 	<script>
 		function updateArticle(event){
 			//event.preventDefault()
@@ -272,7 +311,8 @@
 		function closeModal(){
 			modalUpdateArticle.style.display = "none"
 		}
-	</script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>	
+		const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+		const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+	</script>	
 </body>
 </html>

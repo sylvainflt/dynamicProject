@@ -58,9 +58,30 @@ public class CommerceServlet extends HttpServlet {
 			
 			this.doAllerCommande(request, response);
 			
+		} else if(request.getParameter("flag").equals("allerLigneCommande")) {
+			
+			this.doAllerLigneCommande(request, response);
+			
+		} else if(request.getParameter("flag").equals("retourlisteCommandes")) {
+			
+			request.getRequestDispatcher("/connexionAdmin.jsp").forward(request, response);
+			
 		} else {
 			response.getWriter().append("Served at: ").append(request.getContextPath());
 		}
+	}
+
+	private void doAllerLigneCommande(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		int id = Integer.parseInt(request.getParameter("id"));
+		System.out.println(id);
+		
+		LigneCommande ligneCommande = co.getLigneCommande(id);
+						
+		request.getSession().setAttribute("ligneCommande", ligneCommande);
+		
+		request.getRequestDispatcher("/UpdateLigneCommande.jsp").forward(request, response);
+		
 	}
 
 	private void doAllerCommande(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -168,9 +189,26 @@ public class CommerceServlet extends HttpServlet {
 			
 			this.doAjoutArticleHibernate(request, response);
 			
+		} else if (request.getParameter("flag").equals("modifLigneCommande")){
+			
+			this.doModifLigneCommande(request, response);
+			
 		} else {
 			this.doGet(request, response);
 		}
+	}
+
+	private void doModifLigneCommande(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		LigneCommande ligneCommande = (LigneCommande) request.getSession().getAttribute("ligneCommande");
+		co.saveLigneCommande(ligneCommande.getIdLigneCommande(), Integer.parseInt(request.getParameter("quantite")));
+		
+		List<LigneCommande> lignesCommande = co.getLignesCommande(ligneCommande.getIdCommande());
+		
+		request.getSession().setAttribute("lignesCommande", lignesCommande);
+		
+		request.getRequestDispatcher("/Commande.jsp").forward(request, response);
+		
 	}
 
 	private void doModifierUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -182,8 +220,8 @@ public class CommerceServlet extends HttpServlet {
 		int age = Integer.parseInt(request.getParameter("age"));
 		String sexe = request.getParameter("sex");
 		
-		int id = ((User)request.getSession().getAttribute("user")).getId();
-		User user = new User( id, lname, fname, adresse, tel, age, sexe);
+		int id = ((Users)request.getSession().getAttribute("user")).getIdUsers();
+		Users user = new Users( id, lname, fname, adresse, tel, age, sexe);
 		
 		co.updateUser(user);
 		
@@ -473,7 +511,7 @@ public class CommerceServlet extends HttpServlet {
 			Integer age = Integer.valueOf(request.getParameter("age"));
 			String sex = request.getParameter("sex");
 			
-			User user = new User(lname, fname, adress, tel, age, sex);
+			Users user = new Users(lname, fname, adress, tel, age, sex);
 			
 			String login = request.getParameter("login");
 			String password = request.getParameter("password");
@@ -529,6 +567,9 @@ public class CommerceServlet extends HttpServlet {
 					
 				    List<Commande> listeCommandes = co.getListeCommandes();				    
 				    request.getSession().setAttribute("commandes", listeCommandes);
+				    
+				    List<Users> listeUsers = co.getListeUsers();				    
+				    request.getSession().setAttribute("users", listeUsers);
 				    
 					request.getRequestDispatcher("/connexionAdmin.jsp").forward(request, response);
 				}else {
