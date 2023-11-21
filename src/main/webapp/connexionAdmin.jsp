@@ -196,7 +196,7 @@
 			</form>
 			
 		  </div>
-		  <div class="tab-pane fade active" id="commandes" role="tabpanel">
+		  <div class="tab-pane fade" id="commandes" role="tabpanel">
 		  
 		  	<form action="CommerceServlet?flag=suppressionCommandes" method="post">
 			  	<table class="table table-hover mt-2">
@@ -226,8 +226,8 @@
 				  </tbody>
 				</table>
 			</form>	
-		  </div>
 		 
+		 </div>
 		 <div class="tab-pane fade" id="utilisateurs" role="tabpanel">
 		    
 		    <form action="CommerceServlet?flag=suppressionUsers" method="post">

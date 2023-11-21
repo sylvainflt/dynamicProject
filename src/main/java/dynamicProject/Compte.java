@@ -1,24 +1,36 @@
 package dynamicProject;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Compte {
 
-	private int id;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private int idCompte;
 	private String login;
-	private String password;
+	private String pwd;
 	private String type;
 	
-	public Compte(String login, String password, String type) {
+	public Compte() {
+		super();
+	}
+	
+	public Compte(String login, String pwd, String type) {
 		super();
 		this.login = login;
-		this.password = password;
+		this.pwd = pwd;
 		this.type = type;
 	}
 	
-	public Compte(int id, String login, String password, String type) {
+	public Compte(int idCompte, String login, String pwd, String type) {
 		super();
-		this.id = id;
+		this.idCompte = idCompte;
 		this.login = login;
-		this.password = password;
+		this.pwd = pwd;
 		this.type = type;
 	}
 
@@ -26,16 +38,16 @@ public class Compte {
 		return login;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getPwd() {
+		return pwd;
 	}
 
 	public String getType() {
 		return type;
 	}
 
-	public int getId() {
-		return id;
+	public int getIdCompte() {
+		return idCompte;
 	}
 	
 	

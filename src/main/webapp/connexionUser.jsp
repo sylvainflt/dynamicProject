@@ -53,7 +53,7 @@
 			  		</div>
 			  		<div>
 			  			<p>${compte.login}</p>		      
-						<p>${compte.password}</p>
+						<p>${compte.pwd}</p>
 			  		</div>
 			  	</div>				
 				<a href="CommerceServlet?flag=allerAModifMDP">

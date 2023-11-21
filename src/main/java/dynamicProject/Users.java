@@ -88,6 +88,10 @@ public class Users {
 	public void setIdCompte(int idCompte) {
 		this.idCompte = idCompte;
 	}
+
+	public int getIdCompte() {
+		return idCompte;
+	}
 	
 	
 	

@@ -13,5 +13,6 @@
   <mapping class="dynamicProject.Article1"/>
   <mapping class="dynamicProject.LigneCommande"/>
   <mapping class="dynamicProject.Users"/>
+  <mapping class="dynamicProject.Compte"/>
  </session-factory>
 </hibernate-configuration>

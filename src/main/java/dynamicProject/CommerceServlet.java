@@ -213,9 +213,31 @@ public class CommerceServlet extends HttpServlet {
 			
 			this.doSuppLignesCommande(request, response);
 			
+		} else if (request.getParameter("flag").equals("suppressionUsers")){
+			
+			this.doSuppressionUsers(request, response);
+			
 		} else {
 			this.doGet(request, response);
 		}
+	}
+
+	private void doSuppressionUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		String[] cochesUsers = request.getParameterValues("usersIds");
+		
+		if(cochesUsers != null && cochesUsers.length > 0) {
+			for ( String coche : cochesUsers ) {
+				co.supprimerUser(coche);
+			}
+						
+		}
+		
+		List<Users> listeUsers = co.getListeUsers();				    
+	    request.getSession().setAttribute("users", listeUsers);
+		
+		request.getRequestDispatcher("/connexionAdmin.jsp").forward(request, response);
+		
 	}
 
 	private void doSuppLignesCommande(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

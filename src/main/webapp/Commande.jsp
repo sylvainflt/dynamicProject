@@ -57,26 +57,27 @@
 			
 			<form action="CommerceServlet?flag=ajoutLigneCommande" method="post">
 			  	
-			  	<div class="form-group">
-			        
-					<select class="form-control" id="articleSelect" name="idArticle">		
-			      	<c:forEach items="${articles}" var="article">
-				        <option class="text-info" value="${article.id}">${article.designation}</option>
-				    </c:forEach>
-				  </select>  
-				</div>
-			    <div class="form-group">
-			        <label>quantité</label>
-					<input type="number" class="form-control w-50" name="quantite" required>
-				</div>
-				<div class="text-center">
-					<button type="submit" value="Valider" class="btn btn-primary mt-1">Valider</button>
+			  	<div class="d-flex gap-3">
+				  	<div class="">	
+				  		<label>article</label>			        
+						<select class="form-control" id="articleSelect" name="idArticle">		
+				      	<c:forEach items="${articles}" var="article">
+					        <option class="text-info" value="${article.id}">${article.designation}</option>
+					    </c:forEach>
+					  </select>  
+					</div>
+				    <div class="">
+				        <label>quantité</label>
+						<input type="number" class="form-control" name="quantite" required>
+					</div>
+					<button type="submit" value="Valider" class="btn btn-primary mt-2">Valider</button>
 				</div>	
+				
 		    	
 			</form>	
 			
 			<a href="CommerceServlet?flag=retourlisteCommandes">
-		    	<button type="button" value="Retour" class="btn btn-secondary mt-1">Retour</button>
+		    	<button type="button" value="Retour" class="btn btn-secondary mt-3">Retour</button>
 		    </a>
 		</div>
 		

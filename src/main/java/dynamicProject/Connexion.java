@@ -163,7 +163,7 @@ public class Connexion {
 		try {
 			
 			ps = cnt.prepareStatement("INSERT INTO compte (login, pwd, type) \n"
-					+ "VALUES('"+compte.getLogin()+"','"+compte.getPassword()+"','"+compte.getType()+"')");
+					+ "VALUES('"+compte.getLogin()+"','"+compte.getPwd()+"','"+compte.getType()+"')");
 			ps.execute();	
 			
 			st = cnt.createStatement();
@@ -728,6 +728,24 @@ public class Connexion {
 		
 		LigneCommande lc = session.get(LigneCommande.class, Integer.parseInt(coche));		
 		session.delete(lc);
+		
+		tr.commit();
+		session.close();
+		
+	}
+
+	public void supprimerUser(String coche) {
+
+		session = sf.openSession();
+		tr = session.beginTransaction();
+		
+		Users u = session.get(Users.class, Integer.parseInt(coche));
+		
+		Compte c = session.get(Compte.class, u.getIdCompte());
+		
+		session.delete(u);
+				
+		session.delete(c);
 		
 		tr.commit();
 		session.close();
