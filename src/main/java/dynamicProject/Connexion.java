@@ -680,6 +680,60 @@ public class Connexion {
 		
 	}
 
+	public Commande getCommande(int id) {
+		
+		Connection cnt = this.myCnx();
+		Statement st;
+		Commande commande = null;
+		
+		try {
+			
+			st = cnt.createStatement();
+			ResultSet rs = st.executeQuery("select c.idCommande, c.dateCommande, c.idUsers, u.lname "
+					+ "from commande c, users u "
+					+ "where c.idUsers = u.idUsers "
+					+ "and c.idCommande = "+id);						
+					
+			if(rs.next()) {
+				
+				commande = new Commande(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getString(4));												
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		this.cloturerConnexion();
+		return commande;
+		
+	}
+
+	public void nouvelleLigneCommande(LigneCommande lc) {
+
+		session = sf.openSession();
+		tr = session.beginTransaction();
+		
+		session.persist(lc);		
+		
+		tr.commit();
+		session.close();
+		
+	}
+
+	public void supprimerLigneCommande(String coche) {
+
+		session = sf.openSession();
+		tr = session.beginTransaction();
+		
+		LigneCommande lc = session.get(LigneCommande.class, Integer.parseInt(coche));		
+		session.delete(lc);
+		
+		tr.commit();
+		session.close();
+		
+	}
+
 	
 
 	

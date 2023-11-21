@@ -66,6 +66,10 @@ public class CommerceServlet extends HttpServlet {
 			
 			request.getRequestDispatcher("/connexionAdmin.jsp").forward(request, response);
 			
+		} else if(request.getParameter("flag").equals("retourCommande")) {
+			
+			request.getRequestDispatcher("/Commande.jsp").forward(request, response);
+			
 		} else {
 			response.getWriter().append("Served at: ").append(request.getContextPath());
 		}
@@ -92,6 +96,14 @@ public class CommerceServlet extends HttpServlet {
 		List<LigneCommande> lignesCommande = co.getLignesCommande(id);
 						
 		request.getSession().setAttribute("lignesCommande", lignesCommande);
+		
+		Commande commande = co.getCommande(id);
+		
+		request.getSession().setAttribute("commande", commande);
+		
+		List<Article> listeArticles = co.getListeArticles();
+		
+		request.getSession().setAttribute("articles", listeArticles);
 		
 		request.getRequestDispatcher("/Commande.jsp").forward(request, response);
 		
@@ -193,9 +205,49 @@ public class CommerceServlet extends HttpServlet {
 			
 			this.doModifLigneCommande(request, response);
 			
+		} else if (request.getParameter("flag").equals("ajoutLigneCommande")){
+			
+			this.doAjoutLigneCommande(request, response);
+			
+		} else if (request.getParameter("flag").equals("suppLignesCommande")){
+			
+			this.doSuppLignesCommande(request, response);
+			
 		} else {
 			this.doGet(request, response);
 		}
+	}
+
+	private void doSuppLignesCommande(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		String[] cochesLignesCommande = request.getParameterValues("lignesCommandeIds");
+		
+		if(cochesLignesCommande != null && cochesLignesCommande.length > 0) {
+			for ( String coche : cochesLignesCommande ) {
+				co.supprimerLigneCommande(coche);
+			}
+						
+		}
+		
+		request.getRequestDispatcher("/connexionAdmin.jsp").forward(request, response);
+		
+	}
+
+	private void doAjoutLigneCommande(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		int idCommande = ((Commande)request.getSession().getAttribute("commande")).getIdCommande();
+		int idArticle = Integer.parseInt(request.getParameter("idArticle"));
+		int qtyCommandee = Integer.parseInt(request.getParameter("quantite"));
+		
+		LigneCommande lc = new LigneCommande();
+		lc.setIdCommande(idCommande);
+		lc.setIdArticle(idArticle);
+		lc.setQtyCommandee(qtyCommandee);
+		
+		co.nouvelleLigneCommande(lc);
+		
+		request.getRequestDispatcher("/connexionAdmin.jsp").forward(request, response);
+		
 	}
 
 	private void doModifLigneCommande(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -16,11 +16,11 @@
 		
 		<h2 class="text-center mt-4">Bienvenue administrateur : ${user}</h2>
 	
-		<h3 class="text-center mt-4">Contenu d'une commande</h3>
+		<h3 class="text-center mt-4">Contenu d'une commande (${commande.idCommande} : ${commande.dateCommande})</h3>
 			
 		<div class="col-5 mt-2 mx-auto">
 		
-			<form action="CommerceServlet?flag=suppArticlesCommande" method="post">
+			<form action="CommerceServlet?flag=suppLignesCommande" method="post">
 			  	<table class="table table-hover mt-2">
 				  <thead>
 				    <tr>
@@ -52,6 +52,29 @@
 				  </tbody>
 				</table>
 			</form>	
+			
+			<h4>Ajout d'une ligne de commande</h4>
+			
+			<form action="CommerceServlet?flag=ajoutLigneCommande" method="post">
+			  	
+			  	<div class="form-group">
+			        
+					<select class="form-control" id="articleSelect" name="idArticle">		
+			      	<c:forEach items="${articles}" var="article">
+				        <option class="text-info" value="${article.id}">${article.designation}</option>
+				    </c:forEach>
+				  </select>  
+				</div>
+			    <div class="form-group">
+			        <label>quantité</label>
+					<input type="number" class="form-control w-50" name="quantite" required>
+				</div>
+				<div class="text-center">
+					<button type="submit" value="Valider" class="btn btn-primary mt-1">Valider</button>
+				</div>	
+		    	
+			</form>	
+			
 			<a href="CommerceServlet?flag=retourlisteCommandes">
 		    	<button type="button" value="Retour" class="btn btn-secondary mt-1">Retour</button>
 		    </a>

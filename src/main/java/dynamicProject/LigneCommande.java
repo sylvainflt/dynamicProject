@@ -46,6 +46,18 @@ public class LigneCommande {
 	public void setQtyCommandee(int qtyCommandee) {
 		this.qtyCommandee = qtyCommandee;
 	}
+
+	public void setIdLigneCommande(int idLigneCommande) {
+		this.idLigneCommande = idLigneCommande;
+	}
+
+	public void setIdCommande(int idCommande) {
+		this.idCommande = idCommande;
+	}
+
+	public void setIdArticle(int idArticle) {
+		this.idArticle = idArticle;
+	}
 	
 	
 	
